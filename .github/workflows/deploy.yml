@@ -16,9 +16,6 @@ concurrency:
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on:
       group: databricks-solutions-protected-runner-group
     if: startsWith(github.ref, 'refs/tags/')
