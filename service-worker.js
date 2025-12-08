@@ -1,4 +1,4 @@
-const CACHE_NAME = 'databricks-waf-v0.1.0';
+const CACHE_NAME = 'databricks-waf-v0.2.0';
 const OFFLINE_URL = '/index.html';
 
 // Files to cache for offline use
@@ -15,6 +15,7 @@ const FILES_TO_CACHE = [
     '/manifest.json',
     '/src/assets/images/waf-implementation-cycle.png',
     '/src/assets/images/lakehouse-architecture-pillars.png',
+    '/src/assets/icons/logo-waf.png',
     '/src/assets/icons/icon-72x72.png',
     '/src/assets/icons/icon-96x96.png',
     '/src/assets/icons/icon-128x128.png',

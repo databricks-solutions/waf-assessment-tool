@@ -11,7 +11,7 @@ class WAFApp {
         this.currentPillarIndex = 0; // Current pillar (0-6)
         this.currentQuestionIndex = 0; // Current question within pillar
         this.pillarsData = this.initializePillarsData();
-        this.init();
+        // Note: init() is called explicitly after construction to properly await async operations
     }
 
     /**
@@ -84,13 +84,42 @@ class WAFApp {
     /**
      * Initialize the application
      */
-    init() {
+    async init() {
         console.log('Initializing Databricks WAF Assessment App...');
+        
+        // Initialize i18n system first
+        if (typeof I18n !== 'undefined') {
+            await I18n.init();
+            I18n.renderLanguageSelector('language-selector-container');
+        }
+        
         this.loadSavedData();
         this.setupEventListeners();
         this.updateCopyrightYear();
         this.updateAssessmentDisplay();
         console.log('App initialized successfully');
+    }
+
+    /**
+     * Get translated text
+     * @param {string} key - Translation key
+     * @param {Object} params - Interpolation parameters
+     * @returns {string} Translated text
+     */
+    t(key, params = {}) {
+        if (typeof I18n !== 'undefined') {
+            const translation = I18n.t(key, params);
+            // If translation is the key itself, try to make it more readable
+            if (translation === key) {
+                // Extract the last part of the key and make it readable
+                const lastPart = key.split('.').pop();
+                return lastPart.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+            }
+            return translation;
+        }
+        // Fallback: make key readable
+        const lastPart = key.split('.').pop();
+        return lastPart.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
     }
 
     /**
@@ -373,7 +402,7 @@ class WAFApp {
         // Already at the end - validate before finishing
         else {
             if (this.validateAllQuestionsAnswered()) {
-                alert('Congratulations! You have completed all questions! View your results in the Results page.');
+                alert(this.t('messages.congratulations'));
                 this.navigateToPage('results');
             }
             return;
@@ -415,10 +444,11 @@ class WAFApp {
 
         if (unansweredQuestions.length > 0) {
             const firstUnanswered = unansweredQuestions[0];
-            const message = `You have ${unansweredQuestions.length} unanswered question(s).\n\n` +
-                          `First unanswered: ${firstUnanswered.identifier} - ${firstUnanswered.title}\n\n` +
-                          `Please answer all questions before completing the assessment.\n\n` +
-                          `Go to first unanswered question?`;
+            const message = this.t('messages.unansweredQuestions', {
+                count: unansweredQuestions.length,
+                identifier: firstUnanswered.identifier,
+                title: firstUnanswered.title
+            });
 
             if (confirm(message)) {
                 this.currentPillarIndex = firstUnanswered.pillarIndex;
@@ -525,15 +555,15 @@ class WAFApp {
             </div>
 
             <div class="question-status-row">
-                <div class="status-label">Status: <span class="status-required">*</span></div>
+                <div class="status-label">${this.t('assessment.status')}: <span class="status-required">*</span></div>
                 <select id="question-status"
                         class="status-dropdown ${savedStatus ? 'status-' + savedStatus : 'status-unselected'}"
                         onchange="wafApp.saveQuestionStatus('${currentPillar.id}', '${currentQuestion.id}', this.value)">
-                    <option value="answer-later" ${!savedStatus || savedStatus === 'answer-later' ? 'selected' : ''}>Answer later</option>
-                    <option value="open" ${savedStatus === 'open' ? 'selected' : ''}>Open</option>
-                    <option value="in-progress" ${savedStatus === 'in-progress' ? 'selected' : ''}>In Progress</option>
-                    <option value="completed" ${savedStatus === 'completed' ? 'selected' : ''}>Completed</option>
-                    <option value="ignore" ${savedStatus === 'ignore' ? 'selected' : ''}>Ignore</option>
+                    <option value="answer-later" ${!savedStatus || savedStatus === 'answer-later' ? 'selected' : ''}>${this.t('status.answerLater')}</option>
+                    <option value="open" ${savedStatus === 'open' ? 'selected' : ''}>${this.t('status.open')}</option>
+                    <option value="in-progress" ${savedStatus === 'in-progress' ? 'selected' : ''}>${this.t('status.inProgress')}</option>
+                    <option value="completed" ${savedStatus === 'completed' ? 'selected' : ''}>${this.t('status.completed')}</option>
+                    <option value="ignore" ${savedStatus === 'ignore' ? 'selected' : ''}>${this.t('status.ignore')}</option>
                 </select>
             </div>
         `;
@@ -548,7 +578,7 @@ class WAFApp {
 
         const questionCounter = document.getElementById('question-counter');
         if (questionCounter) {
-            questionCounter.textContent = `Question ${currentQuestionNumber} of ${totalQuestions}`;
+            questionCounter.textContent = this.t('assessment.questionCounter', { current: currentQuestionNumber, total: totalQuestions });
         }
 
         // Update navigation buttons
@@ -565,7 +595,7 @@ class WAFApp {
         );
 
         if (btnNext) {
-            btnNext.innerHTML = isLastQuestion ? '<span>Finish Assessment</span>' : '<span>Next →</span>';
+            btnNext.innerHTML = isLastQuestion ? `<span>${this.t('assessment.finishAssessment')}</span>` : `<span>${this.t('assessment.next')}</span>`;
         }
     }
 
@@ -597,7 +627,7 @@ class WAFApp {
 
         // Don't save empty values (but allow "answer-later")
         if (!status || status === '') {
-            console.warn('Cannot save empty status');
+            console.warn(this.t('messages.cannotSaveEmpty'));
             return;
         }
 
@@ -785,10 +815,10 @@ class WAFApp {
         if (!assessment) {
             resultsPage.innerHTML = `
                 <div class="no-results-state">
-                    <h2>No Assessment Selected</h2>
-                    <p>Please select or create an assessment to view results.</p>
+                    <h2>${this.t('results.noAssessmentTitle')}</h2>
+                    <p>${this.t('results.noAssessmentText')}</p>
                     <button class="btn btn-primary" onclick="wafApp.showAssessmentSelector()">
-                        Select Assessment
+                        ${this.t('results.selectAssessment')}
                     </button>
                 </div>
             `;
@@ -802,24 +832,24 @@ class WAFApp {
         resultsPage.innerHTML = `
             <div class="results-container">
                 <div class="results-header">
-                    <h2>Assessment Results: ${this.escapeHtml(results.assessmentName)}</h2>
+                    <h2>${this.t('results.title')} ${this.escapeHtml(results.assessmentName)}</h2>
                     <div class="results-metadata">
-                        <span>Created: ${new Date(results.createdAt).toLocaleDateString()}</span>
-                        <span>Updated: ${new Date(results.updatedAt).toLocaleDateString()}</span>
+                        <span>${this.t('results.created')} ${new Date(results.createdAt).toLocaleDateString()}</span>
+                        <span>${this.t('results.updated')} ${new Date(results.updatedAt).toLocaleDateString()}</span>
                     </div>
                     ${results.categories.length > 0 ? `
                         <div class="results-categories">
-                            <strong>Categories:</strong>
+                            <strong>${this.t('results.categories')}</strong>
                             ${results.categories.map(cat => `<span class="category-tag">${cat}</span>`).join('')}
                         </div>
                     ` : ''}
                 </div>
 
                 <div class="results-overall">
-                    <h3>Overall Progress</h3>
+                    <h3>${this.t('results.overallProgress')}</h3>
                     <div class="overall-content-grid">
                         <div class="visualization-card radar-card">
-                            <h3>Score by Pillar</h3>
+                            <h3>${this.t('results.scoreByPillar')}</h3>
                             <canvas id="pillar-radar-chart"></canvas>
                         </div>
                         <div class="overall-stats">
@@ -827,32 +857,32 @@ class WAFApp {
                                 <div class="stat-icon">🎯</div>
                                 <div class="stat-content">
                                     <div class="stat-value">${results.overall.scorePercentage}%</div>
-                                    <div class="stat-label">Overall Score</div>
-                                    <div class="stat-sublabel">${results.overall.totalScore}/${results.overall.maxPossibleScore} points</div>
+                                    <div class="stat-label">${this.t('results.overallScore')}</div>
+                                    <div class="stat-sublabel">${results.overall.totalScore}/${results.overall.maxPossibleScore} ${this.t('results.points')}</div>
                                 </div>
                             </div>
                             <div class="stat-card stat-card-completion">
                                 <div class="stat-icon">✓</div>
                                 <div class="stat-content">
                                     <div class="stat-value">${results.overall.completionPercentage}%</div>
-                                    <div class="stat-label">Completion Rate</div>
-                                    <div class="stat-sublabel">${results.overall.answeredQuestions}/${results.overall.totalQuestions} questions</div>
+                                    <div class="stat-label">${this.t('results.completionRate')}</div>
+                                    <div class="stat-sublabel">${results.overall.answeredQuestions}/${results.overall.totalQuestions} ${this.t('results.questions')}</div>
                                 </div>
                             </div>
                             <div class="stat-card stat-card-progress">
                                 <div class="stat-icon">⚡</div>
                                 <div class="stat-content">
                                     <div class="stat-value">${results.overall.statusBreakdown.inProgress}</div>
-                                    <div class="stat-label">In Progress</div>
-                                    <div class="stat-sublabel">${results.overall.statusBreakdown.completed} completed</div>
+                                    <div class="stat-label">${this.t('results.inProgressLabel')}</div>
+                                    <div class="stat-sublabel">${results.overall.statusBreakdown.completed} ${this.t('results.completedLabel')}</div>
                                 </div>
                             </div>
                             <div class="stat-card stat-card-pending">
                                 <div class="stat-icon">📋</div>
                                 <div class="stat-content">
                                     <div class="stat-value">${results.overall.statusBreakdown.open}</div>
-                                    <div class="stat-label">Open Items</div>
-                                    <div class="stat-sublabel">${results.overall.statusBreakdown.ignore} ignored</div>
+                                    <div class="stat-label">${this.t('results.openItems')}</div>
+                                    <div class="stat-sublabel">${results.overall.statusBreakdown.ignore} ${this.t('results.ignored')}</div>
                                 </div>
                             </div>
                         </div>
@@ -860,7 +890,7 @@ class WAFApp {
                 </div>
 
                 <div class="results-pillars">
-                    <h3>Results by Pillar</h3>
+                    <h3>${this.t('results.resultsByPillar')}</h3>
                     <div class="results-pillars-grid">
                         ${results.pillars.map((pillar, index) => `
                             <div class="pillar-result-card">
@@ -872,19 +902,19 @@ class WAFApp {
                                         <div class="pillar-result-header">
                                             <h4>${this.escapeHtml(pillar.name)}</h4>
                                             <div class="pillar-result-progress">
-                                                ${pillar.answeredQuestions} of ${pillar.totalQuestions} answered
+                                                ${pillar.answeredQuestions} ${this.t('assessment.of')} ${pillar.totalQuestions} ${this.t('results.answered')}
                                                 (${Math.round((pillar.answeredQuestions / pillar.totalQuestions) * 100)}%)
                                             </div>
                                         </div>
                                         <div class="pillar-result-score">
                                             <div class="pillar-score-percentage">${pillar.scorePercentage}%</div>
-                                            <div class="pillar-score-details">Score: ${pillar.score}/${pillar.maxScore} points</div>
+                                            <div class="pillar-score-details">${this.t('results.score')} ${pillar.score}/${pillar.maxScore} ${this.t('results.points')}</div>
                                         </div>
                                         <div class="pillar-result-stats">
-                                            <span class="status-badge status-open">Open: ${pillar.open}</span>
-                                            <span class="status-badge status-in-progress">In Progress: ${pillar.inProgress}</span>
-                                            <span class="status-badge status-completed">Completed: ${pillar.completed}</span>
-                                            <span class="status-badge status-ignore">Ignored: ${pillar.ignore}</span>
+                                            <span class="status-badge status-open">${this.t('status.open')}: ${pillar.open}</span>
+                                            <span class="status-badge status-in-progress">${this.t('status.inProgress')}: ${pillar.inProgress}</span>
+                                            <span class="status-badge status-completed">${this.t('status.completed')}: ${pillar.completed}</span>
+                                            <span class="status-badge status-ignore">${this.t('status.ignore')}: ${pillar.ignore}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -895,10 +925,10 @@ class WAFApp {
 
                 <div class="results-actions">
                     <button class="btn btn-secondary" onclick="wafApp.exportAssessment('${assessment.id}')">
-                        Export Assessment Data
+                        ${this.t('results.exportData')}
                     </button>
                     <button class="btn btn-primary" onclick="wafApp.navigateToPage('assessment')">
-                        Continue Assessment
+                        ${this.t('results.continueAssessment')}
                     </button>
                 </div>
             </div>
@@ -1135,13 +1165,13 @@ class WAFApp {
         if (this.currentAssessmentId && this.assessments[this.currentAssessmentId]) {
             const assessment = this.assessments[this.currentAssessmentId];
             displayElement.innerHTML = `
-                <span class="assessment-label">Assessment:</span>
+                <span class="assessment-label">${this.t('header.assessmentLabel')}</span>
                 <span class="assessment-name">${this.escapeHtml(assessment.name)}</span>
             `;
             displayElement.classList.remove('no-assessment');
         } else {
             displayElement.innerHTML = `
-                <span class="assessment-label">No assessment selected</span>
+                <span class="assessment-label">${this.t('header.noAssessment')}</span>
             `;
             displayElement.classList.add('no-assessment');
         }
@@ -1192,28 +1222,28 @@ class WAFApp {
         modal.innerHTML = `
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Assessment Manager</h2>
+                    <h2>${this.t('modal.assessmentManager')}</h2>
                     <button class="modal-close" onclick="wafApp.closeModal('assessment-selector-modal')">&times;</button>
                 </div>
                 <div class="modal-body">
                     <div class="assessment-actions">
                         <button class="btn btn-primary" onclick="wafApp.showCreateAssessmentModal()">
-                            <span>+ New Assessment</span>
+                            <span>${this.t('modal.newAssessment')}</span>
                         </button>
                         <button class="btn btn-secondary" onclick="wafApp.showImportAssessmentModal()">
-                            <span>↑ Import Assessment</span>
+                            <span>${this.t('modal.importAssessment')}</span>
                         </button>
                     </div>
 
                     ${assessmentList.length > 0 ? `
                         <div class="assessments-list">
-                            <h3>Existing Assessments</h3>
+                            <h3>${this.t('modal.existingAssessments')}</h3>
                             ${assessmentList.map(assessment => `
                                 <div class="assessment-item ${assessment.id === this.currentAssessmentId ? 'active' : ''}">
                                     <div class="assessment-info">
                                         <div class="assessment-item-header">
                                             <div class="assessment-item-name">${this.escapeHtml(assessment.name)}</div>
-                                            ${assessment.id === this.currentAssessmentId ? `<span class="badge-active">Active</span>` : ''}
+                                            ${assessment.id === this.currentAssessmentId ? `<span class="badge-active">${this.t('modal.active')}</span>` : ''}
                                         </div>
                                         ${assessment.categories && assessment.categories.length > 0 ? `
                                             <div class="assessment-categories">
@@ -1226,17 +1256,17 @@ class WAFApp {
                                     </div>
                                     <div class="assessment-actions-inline">
                                         ${assessment.id !== this.currentAssessmentId ?
-                                            `<button class="btn-icon" onclick="wafApp.loadAssessment('${assessment.id}')" title="Load">
+                                            `<button class="btn-icon" onclick="wafApp.loadAssessment('${assessment.id}')" title="${this.t('modal.load')}">
                                                 <span>📂</span>
                                             </button>` : ''
                                         }
-                                        <button class="btn-icon" onclick="wafApp.showEditAssessmentModal('${assessment.id}')" title="Edit">
+                                        <button class="btn-icon" onclick="wafApp.showEditAssessmentModal('${assessment.id}')" title="${this.t('ui.edit')}">
                                             <span>✏️</span>
                                         </button>
-                                        <button class="btn-icon" onclick="wafApp.exportAssessment('${assessment.id}')" title="Export">
+                                        <button class="btn-icon" onclick="wafApp.exportAssessment('${assessment.id}')" title="${this.t('modal.export')}">
                                             <span>↓</span>
                                         </button>
-                                        <button class="btn-icon btn-danger" onclick="wafApp.deleteAssessment('${assessment.id}')" title="Delete">
+                                        <button class="btn-icon btn-danger" onclick="wafApp.deleteAssessment('${assessment.id}')" title="${this.t('ui.delete')}">
                                             <span>🗑</span>
                                         </button>
                                     </div>
@@ -1245,7 +1275,7 @@ class WAFApp {
                         </div>
                     ` : `
                         <div class="empty-state">
-                            <p>No assessments yet. Create your first assessment to get started.</p>
+                            <p>${this.t('modal.noAssessments')}</p>
                         </div>
                     `}
                 </div>
@@ -1290,35 +1320,35 @@ class WAFApp {
         modal.innerHTML = `
             <div class="modal-content modal-medium">
                 <div class="modal-header">
-                    <h2>Create New Assessment</h2>
+                    <h2>${this.t('modal.createTitle')}</h2>
                     <button class="modal-close" onclick="wafApp.closeModal('create-assessment-modal')">&times;</button>
                 </div>
                 <div class="modal-body">
                     <form id="create-assessment-form" onsubmit="wafApp.handleCreateAssessment(event)">
                         <div class="form-group">
-                            <label for="assessment-name">Assessment Name *</label>
+                            <label for="assessment-name">${this.t('modal.assessmentName')} *</label>
                             <input
                                 type="text"
                                 id="assessment-name"
                                 name="name"
                                 required
-                                placeholder="e.g., Client XYZ - Q4 2024"
+                                placeholder="${this.t('modal.assessmentNamePlaceholder')}"
                                 maxlength="100"
                                 autocomplete="off"
                             >
                         </div>
                         <div class="form-group">
-                            <label for="assessment-description">Description</label>
+                            <label for="assessment-description">${this.t('modal.description')}</label>
                             <textarea
                                 id="assessment-description"
                                 name="description"
                                 rows="2"
-                                placeholder="Add notes..."
+                                placeholder="${this.t('modal.descriptionPlaceholder')}"
                                 maxlength="500"
                             ></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Categories to Assess *</label>
+                            <label>${this.t('modal.categoriesToAssess')} *</label>
                             <div class="categories-grid">
                                 ${categories.map(category => `
                                     <label class="category-checkbox">
@@ -1332,14 +1362,14 @@ class WAFApp {
                                     </label>
                                 `).join('')}
                             </div>
-                            <small>Select at least one category</small>
+                            <small>${this.t('modal.selectAtLeastOne')}</small>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onclick="wafApp.closeModal('create-assessment-modal')">
-                                Cancel
+                                ${this.t('ui.cancel')}
                             </button>
                             <button type="submit" class="btn btn-primary">
-                                Create Assessment
+                                ${this.t('modal.createAssessment')}
                             </button>
                         </div>
                     </form>
@@ -1370,12 +1400,12 @@ class WAFApp {
         const categories = Array.from(categoryCheckboxes).map(cb => cb.value);
 
         if (!name) {
-            alert('Please enter an assessment name');
+            alert(this.t('messages.enterName'));
             return;
         }
 
         if (categories.length === 0) {
-            alert('Please select at least one category to assess');
+            alert(this.t('messages.selectCategory'));
             return;
         }
 
@@ -1415,7 +1445,7 @@ class WAFApp {
     showEditAssessmentModal(assessmentId) {
         const assessment = this.assessments[assessmentId];
         if (!assessment) {
-            alert('Assessment not found');
+            alert(this.t('messages.assessmentNotFound'));
             return;
         }
 
@@ -1431,36 +1461,36 @@ class WAFApp {
         modal.innerHTML = `
             <div class="modal-content modal-medium">
                 <div class="modal-header">
-                    <h2>Edit Assessment</h2>
+                    <h2>${this.t('modal.editTitle')}</h2>
                     <button class="modal-close" onclick="wafApp.closeModal('edit-assessment-modal')">&times;</button>
                 </div>
                 <div class="modal-body">
                     <form id="edit-assessment-form" onsubmit="wafApp.handleUpdateAssessment(event, '${assessmentId}')">
                         <div class="form-group">
-                            <label for="edit-assessment-name">Assessment Name *</label>
+                            <label for="edit-assessment-name">${this.t('modal.assessmentName')} *</label>
                             <input
                                 type="text"
                                 id="edit-assessment-name"
                                 name="name"
                                 required
-                                placeholder="e.g., Client XYZ - Q4 2024"
+                                placeholder="${this.t('modal.assessmentNamePlaceholder')}"
                                 maxlength="100"
                                 autocomplete="off"
                                 value="${this.escapeHtml(assessment.name)}"
                             >
                         </div>
                         <div class="form-group">
-                            <label for="edit-assessment-description">Description</label>
+                            <label for="edit-assessment-description">${this.t('modal.description')}</label>
                             <textarea
                                 id="edit-assessment-description"
                                 name="description"
                                 rows="2"
-                                placeholder="Add notes..."
+                                placeholder="${this.t('modal.descriptionPlaceholder')}"
                                 maxlength="500"
                             >${this.escapeHtml(assessment.description || '')}</textarea>
                         </div>
                         <div class="form-group">
-                            <label>Categories to Assess *</label>
+                            <label>${this.t('modal.categoriesToAssess')} *</label>
                             <div class="categories-grid">
                                 ${categories.map(category => `
                                     <label class="category-checkbox">
@@ -1474,14 +1504,14 @@ class WAFApp {
                                     </label>
                                 `).join('')}
                             </div>
-                            <small>Select at least one category</small>
+                            <small>${this.t('modal.selectAtLeastOne')}</small>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onclick="wafApp.closeModal('edit-assessment-modal')">
-                                Cancel
+                                ${this.t('ui.cancel')}
                             </button>
                             <button type="submit" class="btn btn-primary">
-                                Save Changes
+                                ${this.t('modal.saveChanges')}
                             </button>
                         </div>
                     </form>
@@ -1506,7 +1536,7 @@ class WAFApp {
 
         const assessment = this.assessments[assessmentId];
         if (!assessment) {
-            alert('Assessment not found');
+            alert(this.t('messages.assessmentNotFound'));
             return;
         }
 
@@ -1519,12 +1549,12 @@ class WAFApp {
         const categories = Array.from(categoryCheckboxes).map(cb => cb.value);
 
         if (!name) {
-            alert('Please enter an assessment name');
+            alert(this.t('messages.enterName'));
             return;
         }
 
         if (categories.length === 0) {
-            alert('Please select at least one category to assess');
+            alert(this.t('messages.selectCategory'));
             return;
         }
 
@@ -1623,7 +1653,7 @@ class WAFApp {
         }
 
         const assessment = this.assessments[assessmentId];
-        const confirmMessage = `Are you sure you want to delete "${assessment.name}"?\n\nThis action cannot be undone.`;
+        const confirmMessage = this.t('messages.confirmDelete', { name: assessment.name });
 
         if (!confirm(confirmMessage)) {
             return;
@@ -1690,16 +1720,16 @@ class WAFApp {
         modal.innerHTML = `
             <div class="modal-content modal-small">
                 <div class="modal-header">
-                    <h2>Import Assessment</h2>
+                    <h2>${this.t('modal.importTitle')}</h2>
                     <button class="modal-close" onclick="wafApp.closeModal('import-assessment-modal')">&times;</button>
                 </div>
                 <div class="modal-body">
                     <div class="import-instructions">
-                        <p>Select a previously exported assessment JSON file to import.</p>
+                        <p>${this.t('modal.importInstructions')}</p>
                     </div>
                     <form id="import-assessment-form" onsubmit="wafApp.handleImportAssessment(event)">
                         <div class="form-group">
-                            <label for="import-file">Assessment File *</label>
+                            <label for="import-file">${this.t('modal.assessmentFile')} *</label>
                             <input
                                 type="file"
                                 id="import-file"
@@ -1710,10 +1740,10 @@ class WAFApp {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onclick="wafApp.closeModal('import-assessment-modal')">
-                                Cancel
+                                ${this.t('ui.cancel')}
                             </button>
                             <button type="submit" class="btn btn-primary">
-                                Import Assessment
+                                ${this.t('modal.importBtn')}
                             </button>
                         </div>
                     </form>
@@ -1766,13 +1796,13 @@ class WAFApp {
             this.updateAssessmentDisplay();
 
             this.closeModal('import-assessment-modal');
-            alert(`Assessment "${assessment.name}" imported successfully!`);
+            alert(this.t('messages.assessmentImported', { name: assessment.name }));
             this.showAssessmentSelector();
 
             console.log('Imported assessment:', assessment.name);
         } catch (error) {
             console.error('Error importing assessment:', error);
-            alert('Error importing assessment. Please ensure the file is a valid assessment JSON file.');
+            alert(this.t('messages.importError'));
         }
     }
 
@@ -1818,8 +1848,9 @@ class WAFApp {
 }
 
 // Initialize the application when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     window.wafApp = new WAFApp();
+    await window.wafApp.init();
 
     // Handle initial page based on URL query parameters
     const urlParams = new URLSearchParams(window.location.search);

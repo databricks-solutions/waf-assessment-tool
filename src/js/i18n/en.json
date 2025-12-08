@@ -1,0 +1,213 @@
+{
+  "ui": {
+    "selectLanguage": "Select Language",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "close": "Close",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "required": "Required",
+    "optional": "Optional",
+    "all": "All"
+  },
+  "nav": {
+    "home": "Home",
+    "assessment": "Assessment",
+    "results": "Results"
+  },
+  "header": {
+    "title": "WAF Assessment Tool",
+    "noAssessment": "No assessment selected",
+    "assessmentLabel": "Assessment:",
+    "manageAssessments": "Manage Assessments"
+  },
+  "footer": {
+    "copyright": "© {year} Databricks. All rights reserved.",
+    "version": "Version {version}"
+  },
+  "home": {
+    "heroTitle": "Welcome to the Databricks Well Architected Framework Assessment Tool",
+    "heroSubtitle": "Evaluate your Databricks lakehouse architecture against industry best practices and identify opportunities for optimization across seven critical pillars.",
+    "startAssessment": "Start New Assessment",
+    "aboutTitle": "About the Well Architected Framework",
+    "aboutText": "The Databricks Well Architected Framework (WAF) provides comprehensive guidance for implementing a data lakehouse on the Databricks Data Intelligence Platform. It helps organizations build safe, reliable, efficient, and cost-effective data and AI solutions through structured assessments and continuous improvement cycles.",
+    "pillarsTitle": "The Seven Pillars of Excellence",
+    "pillarsDescription": "The framework is built on seven fundamental pillars that ensure comprehensive coverage of all critical aspects of your lakehouse architecture:",
+    "pillar1Name": "Data Governance",
+    "pillar1Desc": "Ensure data brings value and supports business strategy through proper governance, cataloging, and metadata management.",
+    "pillar2Name": "Interoperability & Usability",
+    "pillar2Desc": "Enable seamless interaction with users and systems through open standards and intuitive interfaces.",
+    "pillar3Name": "Operational Excellence",
+    "pillar3Desc": "Maintain production systems efficiently with robust monitoring, automation, and incident management.",
+    "pillar4Name": "Security, Privacy & Compliance",
+    "pillar4Desc": "Protect data and systems from threats while meeting regulatory requirements and privacy standards.",
+    "pillar5Name": "Reliability",
+    "pillar5Desc": "Recover from failures and continue functioning through redundancy, backup strategies, and disaster recovery.",
+    "pillar6Name": "Performance Efficiency",
+    "pillar6Desc": "Optimize resource usage and adapt to changing demands with efficient data processing and query optimization.",
+    "pillar7Name": "Cost Optimization",
+    "pillar7Desc": "Maximize business value while minimizing costs through resource right-sizing and usage optimization.",
+    "architectureTitle": "Lakehouse Architecture",
+    "architectureDescription": "Built on open standards and unified governance, the Databricks lakehouse architecture combines the best of data lakes and data warehouses:",
+    "architectureCaption": "The lakehouse stack featuring Unity Catalog for unified governance, Delta Lake UniForm for open standards, and the Seven Pillars of the Well Architected Framework",
+    "cycleTitle": "Continuous Improvement Cycle",
+    "cycleDescription": "The WAF follows a structured continuous improvement approach to ensure your lakehouse architecture evolves with best practices and organizational needs:",
+    "cycleCaption": "The continuous improvement cycle: Assess → Prioritize → Remediate → Educate → Automate, Monitor & Iterate",
+    "resourcesTitle": "Platform Documentation",
+    "resourcesDescription": "Access comprehensive lakehouse architecture documentation specific to your cloud platform:",
+    "awsTitle": "AWS Documentation",
+    "awsDesc": "Lakehouse Architecture on Amazon Web Services",
+    "azureTitle": "Azure Documentation",
+    "azureDesc": "Lakehouse Architecture on Microsoft Azure",
+    "gcpTitle": "GCP Documentation",
+    "gcpDesc": "Lakehouse Architecture on Google Cloud Platform",
+    "ctaTitle": "Ready to Get Started?",
+    "ctaText": "Begin your Well Architected Framework assessment and discover insights to optimize your Databricks lakehouse.",
+    "launchAssessment": "Launch Assessment"
+  },
+  "assessment": {
+    "noAssessmentTitle": "No Assessment Selected",
+    "noAssessmentText": "Create a new assessment or load an existing one to get started.",
+    "createNew": "Create New Assessment",
+    "loadExisting": "Load Existing Assessment",
+    "pillars": "Pillars",
+    "toggleSidebar": "Toggle Sidebar",
+    "question": "Question",
+    "of": "of",
+    "status": "Status",
+    "previous": "← Previous",
+    "next": "Next →",
+    "finishAssessment": "Finish Assessment",
+    "questionCounter": "Question {current} of {total}",
+    "breadcrumbPillar": "Pillar",
+    "breadcrumbQuestion": "Question"
+  },
+  "status": {
+    "answerLater": "Answer later",
+    "open": "Open",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "ignore": "Ignore"
+  },
+  "results": {
+    "title": "Assessment Results:",
+    "noAssessmentTitle": "No Assessment Selected",
+    "noAssessmentText": "Please select or create an assessment to view results.",
+    "selectAssessment": "Select Assessment",
+    "created": "Created:",
+    "updated": "Updated:",
+    "categories": "Categories:",
+    "overallProgress": "Overall Progress",
+    "scoreByPillar": "Score by Pillar",
+    "overallScore": "Overall Score",
+    "points": "points",
+    "completionRate": "Completion Rate",
+    "questions": "questions",
+    "inProgressLabel": "In Progress",
+    "completedLabel": "completed",
+    "openItems": "Open Items",
+    "ignored": "ignored",
+    "resultsByPillar": "Results by Pillar",
+    "answered": "answered",
+    "score": "Score:",
+    "exportData": "Export Assessment Data",
+    "continueAssessment": "Continue Assessment"
+  },
+  "modal": {
+    "assessmentManager": "Assessment Manager",
+    "newAssessment": "+ New Assessment",
+    "importAssessment": "↑ Import Assessment",
+    "existingAssessments": "Existing Assessments",
+    "noAssessments": "No assessments yet. Create your first assessment to get started.",
+    "active": "Active",
+    "load": "Load",
+    "export": "Export",
+    "createTitle": "Create New Assessment",
+    "editTitle": "Edit Assessment",
+    "assessmentName": "Assessment Name",
+    "assessmentNamePlaceholder": "e.g., Client XYZ - Q4 2024",
+    "description": "Description",
+    "descriptionPlaceholder": "Add notes...",
+    "categoriesToAssess": "Categories to Assess",
+    "selectAtLeastOne": "Select at least one category",
+    "createAssessment": "Create Assessment",
+    "saveChanges": "Save Changes",
+    "importTitle": "Import Assessment",
+    "importInstructions": "Select a previously exported assessment JSON file to import.",
+    "assessmentFile": "Assessment File",
+    "importBtn": "Import Assessment"
+  },
+  "categories": {
+    "etlDsTools": "ETL & DS tools",
+    "biTools": "BI Tools",
+    "orchestration": "Orchestration",
+    "ingestTransform": "Ingest & Transform",
+    "advancedAnalytics": "Advanced Analytics, ML & Gen AI",
+    "dataWarehouse": "Data Warehouse",
+    "collaboration": "Collaboration",
+    "aiEngine": "AI Engine",
+    "dataAiGovernance": "Data & AI Governance",
+    "cloudPlatform": "Cloud Platform",
+    "security": "Security"
+  },
+  "pillars": {
+    "dataAiGovernance": {
+      "name": "Data & AI Governance",
+      "description": "Ensure data brings value and supports business strategy while maintaining quality and compliance."
+    },
+    "interoperabilityUsability": {
+      "name": "Interoperability & Usability",
+      "description": "Enable seamless interaction between users and systems through open standards."
+    },
+    "operationalExcellence": {
+      "name": "Operational Excellence",
+      "description": "Efficiently maintain production systems with monitoring and automation."
+    },
+    "securityPrivacyCompliance": {
+      "name": "Security, Privacy & Compliance",
+      "description": "Protect data and systems while meeting regulatory requirements."
+    },
+    "reliability": {
+      "name": "Reliability",
+      "description": "Recover from failures and ensure continuous operation."
+    },
+    "performanceEfficiency": {
+      "name": "Performance Efficiency",
+      "description": "Optimize resource usage and adapt to changing demands."
+    },
+    "costOptimization": {
+      "name": "Cost Optimization",
+      "description": "Maximize business value while minimizing costs."
+    }
+  },
+  "messages": {
+    "assessmentCreated": "Assessment created successfully!",
+    "assessmentUpdated": "Assessment updated successfully!",
+    "assessmentDeleted": "Assessment deleted successfully!",
+    "assessmentImported": "Assessment \"{name}\" imported successfully!",
+    "assessmentExported": "Assessment exported successfully!",
+    "confirmDelete": "Are you sure you want to delete \"{name}\"?\n\nThis action cannot be undone.",
+    "enterName": "Please enter an assessment name",
+    "selectCategory": "Please select at least one category to assess",
+    "assessmentNotFound": "Assessment not found",
+    "importError": "Error importing assessment. Please ensure the file is a valid assessment JSON file.",
+    "saveError": "Error saving data. Your browser storage might be full.",
+    "congratulations": "Congratulations! You have completed all questions! View your results in the Results page.",
+    "unansweredQuestions": "You have {count} unanswered question(s).\n\nFirst unanswered: {identifier} - {title}\n\nPlease answer all questions before completing the assessment.\n\nGo to first unanswered question?",
+    "cannotSaveEmpty": "Cannot save empty status"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidFile": "Invalid file format",
+    "fileTooLarge": "File is too large"
+  }
+}
+

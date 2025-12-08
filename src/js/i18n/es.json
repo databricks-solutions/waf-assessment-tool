@@ -1,0 +1,213 @@
+{
+  "ui": {
+    "selectLanguage": "Seleccionar Idioma",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No",
+    "ok": "Aceptar",
+    "required": "Obligatorio",
+    "optional": "Opcional",
+    "all": "Todos"
+  },
+  "nav": {
+    "home": "Inicio",
+    "assessment": "Evaluación",
+    "results": "Resultados"
+  },
+  "header": {
+    "title": "Herramienta de Evaluación WAF",
+    "noAssessment": "Sin evaluación seleccionada",
+    "assessmentLabel": "Evaluación:",
+    "manageAssessments": "Administrar Evaluaciones"
+  },
+  "footer": {
+    "copyright": "© {year} Databricks. Todos los derechos reservados.",
+    "version": "Versión {version}"
+  },
+  "home": {
+    "heroTitle": "Bienvenido a la Herramienta de Evaluación del Marco de Arquitectura Bien Diseñada de Databricks",
+    "heroSubtitle": "Evalúe su arquitectura de lakehouse de Databricks según las mejores prácticas de la industria e identifique oportunidades de optimización en siete pilares críticos.",
+    "startAssessment": "Iniciar Nueva Evaluación",
+    "aboutTitle": "Acerca del Marco de Arquitectura Bien Diseñada",
+    "aboutText": "El Marco de Arquitectura Bien Diseñada (WAF) de Databricks proporciona una guía completa para implementar un data lakehouse en la Plataforma de Inteligencia de Datos de Databricks. Ayuda a las organizaciones a construir soluciones de datos e IA seguras, confiables, eficientes y rentables a través de evaluaciones estructuradas y ciclos de mejora continua.",
+    "pillarsTitle": "Los Siete Pilares de la Excelencia",
+    "pillarsDescription": "El marco se construye sobre siete pilares fundamentales que garantizan una cobertura completa de todos los aspectos críticos de su arquitectura lakehouse:",
+    "pillar1Name": "Gobernanza de Datos",
+    "pillar1Desc": "Asegure que los datos aporten valor y apoyen la estrategia empresarial mediante una gobernanza adecuada, catalogación y gestión de metadatos.",
+    "pillar2Name": "Interoperabilidad y Usabilidad",
+    "pillar2Desc": "Permita una interacción fluida con usuarios y sistemas a través de estándares abiertos e interfaces intuitivas.",
+    "pillar3Name": "Excelencia Operacional",
+    "pillar3Desc": "Mantenga los sistemas de producción de manera eficiente con monitoreo robusto, automatización y gestión de incidentes.",
+    "pillar4Name": "Seguridad, Privacidad y Cumplimiento",
+    "pillar4Desc": "Proteja los datos y sistemas de amenazas mientras cumple con los requisitos regulatorios y estándares de privacidad.",
+    "pillar5Name": "Confiabilidad",
+    "pillar5Desc": "Recupérese de fallos y continúe funcionando a través de redundancia, estrategias de respaldo y recuperación ante desastres.",
+    "pillar6Name": "Eficiencia de Rendimiento",
+    "pillar6Desc": "Optimice el uso de recursos y adáptese a demandas cambiantes con procesamiento de datos eficiente y optimización de consultas.",
+    "pillar7Name": "Optimización de Costos",
+    "pillar7Desc": "Maximice el valor empresarial mientras minimiza costos mediante el dimensionamiento correcto de recursos y optimización del uso.",
+    "architectureTitle": "Arquitectura Lakehouse",
+    "architectureDescription": "Construida sobre estándares abiertos y gobernanza unificada, la arquitectura lakehouse de Databricks combina lo mejor de los lagos de datos y almacenes de datos:",
+    "architectureCaption": "La pila lakehouse con Unity Catalog para gobernanza unificada, Delta Lake UniForm para estándares abiertos, y los Siete Pilares del Marco de Arquitectura Bien Diseñada",
+    "cycleTitle": "Ciclo de Mejora Continua",
+    "cycleDescription": "El WAF sigue un enfoque estructurado de mejora continua para asegurar que su arquitectura lakehouse evolucione con las mejores prácticas y necesidades organizacionales:",
+    "cycleCaption": "El ciclo de mejora continua: Evaluar → Priorizar → Remediar → Educar → Automatizar, Monitorear e Iterar",
+    "resourcesTitle": "Documentación de la Plataforma",
+    "resourcesDescription": "Acceda a documentación completa de arquitectura lakehouse específica para su plataforma en la nube:",
+    "awsTitle": "Documentación AWS",
+    "awsDesc": "Arquitectura Lakehouse en Amazon Web Services",
+    "azureTitle": "Documentación Azure",
+    "azureDesc": "Arquitectura Lakehouse en Microsoft Azure",
+    "gcpTitle": "Documentación GCP",
+    "gcpDesc": "Arquitectura Lakehouse en Google Cloud Platform",
+    "ctaTitle": "¿Listo para Comenzar?",
+    "ctaText": "Comience su evaluación del Marco de Arquitectura Bien Diseñada y descubra ideas para optimizar su lakehouse de Databricks.",
+    "launchAssessment": "Iniciar Evaluación"
+  },
+  "assessment": {
+    "noAssessmentTitle": "Sin Evaluación Seleccionada",
+    "noAssessmentText": "Cree una nueva evaluación o cargue una existente para comenzar.",
+    "createNew": "Crear Nueva Evaluación",
+    "loadExisting": "Cargar Evaluación Existente",
+    "pillars": "Pilares",
+    "toggleSidebar": "Alternar Barra Lateral",
+    "question": "Pregunta",
+    "of": "de",
+    "status": "Estado",
+    "previous": "← Anterior",
+    "next": "Siguiente →",
+    "finishAssessment": "Finalizar Evaluación",
+    "questionCounter": "Pregunta {current} de {total}",
+    "breadcrumbPillar": "Pilar",
+    "breadcrumbQuestion": "Pregunta"
+  },
+  "status": {
+    "answerLater": "Responder después",
+    "open": "Abierto",
+    "inProgress": "En Progreso",
+    "completed": "Completado",
+    "ignore": "Ignorar"
+  },
+  "results": {
+    "title": "Resultados de la Evaluación:",
+    "noAssessmentTitle": "Sin Evaluación Seleccionada",
+    "noAssessmentText": "Por favor seleccione o cree una evaluación para ver los resultados.",
+    "selectAssessment": "Seleccionar Evaluación",
+    "created": "Creado:",
+    "updated": "Actualizado:",
+    "categories": "Categorías:",
+    "overallProgress": "Progreso General",
+    "scoreByPillar": "Puntuación por Pilar",
+    "overallScore": "Puntuación General",
+    "points": "puntos",
+    "completionRate": "Tasa de Completitud",
+    "questions": "preguntas",
+    "inProgressLabel": "En Progreso",
+    "completedLabel": "completados",
+    "openItems": "Elementos Abiertos",
+    "ignored": "ignorados",
+    "resultsByPillar": "Resultados por Pilar",
+    "answered": "respondidas",
+    "score": "Puntuación:",
+    "exportData": "Exportar Datos de Evaluación",
+    "continueAssessment": "Continuar Evaluación"
+  },
+  "modal": {
+    "assessmentManager": "Administrador de Evaluaciones",
+    "newAssessment": "+ Nueva Evaluación",
+    "importAssessment": "↑ Importar Evaluación",
+    "existingAssessments": "Evaluaciones Existentes",
+    "noAssessments": "Aún no hay evaluaciones. Cree su primera evaluación para comenzar.",
+    "active": "Activa",
+    "load": "Cargar",
+    "export": "Exportar",
+    "createTitle": "Crear Nueva Evaluación",
+    "editTitle": "Editar Evaluación",
+    "assessmentName": "Nombre de la Evaluación",
+    "assessmentNamePlaceholder": "ej., Cliente XYZ - Q4 2024",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Agregar notas...",
+    "categoriesToAssess": "Categorías a Evaluar",
+    "selectAtLeastOne": "Seleccione al menos una categoría",
+    "createAssessment": "Crear Evaluación",
+    "saveChanges": "Guardar Cambios",
+    "importTitle": "Importar Evaluación",
+    "importInstructions": "Seleccione un archivo JSON de evaluación previamente exportado para importar.",
+    "assessmentFile": "Archivo de Evaluación",
+    "importBtn": "Importar Evaluación"
+  },
+  "categories": {
+    "etlDsTools": "Herramientas ETL y DS",
+    "biTools": "Herramientas BI",
+    "orchestration": "Orquestación",
+    "ingestTransform": "Ingestión y Transformación",
+    "advancedAnalytics": "Analítica Avanzada, ML e IA Gen",
+    "dataWarehouse": "Almacén de Datos",
+    "collaboration": "Colaboración",
+    "aiEngine": "Motor de IA",
+    "dataAiGovernance": "Gobernanza de Datos e IA",
+    "cloudPlatform": "Plataforma en la Nube",
+    "security": "Seguridad"
+  },
+  "pillars": {
+    "dataAiGovernance": {
+      "name": "Gobernanza de Datos e IA",
+      "description": "Asegure que los datos aporten valor y apoyen la estrategia empresarial mientras mantiene la calidad y el cumplimiento."
+    },
+    "interoperabilityUsability": {
+      "name": "Interoperabilidad y Usabilidad",
+      "description": "Permita una interacción fluida entre usuarios y sistemas a través de estándares abiertos."
+    },
+    "operationalExcellence": {
+      "name": "Excelencia Operacional",
+      "description": "Mantenga eficientemente los sistemas de producción con monitoreo y automatización."
+    },
+    "securityPrivacyCompliance": {
+      "name": "Seguridad, Privacidad y Cumplimiento",
+      "description": "Proteja los datos y sistemas mientras cumple con los requisitos regulatorios."
+    },
+    "reliability": {
+      "name": "Confiabilidad",
+      "description": "Recupérese de fallos y asegure la operación continua."
+    },
+    "performanceEfficiency": {
+      "name": "Eficiencia de Rendimiento",
+      "description": "Optimice el uso de recursos y adáptese a demandas cambiantes."
+    },
+    "costOptimization": {
+      "name": "Optimización de Costos",
+      "description": "Maximice el valor empresarial mientras minimiza costos."
+    }
+  },
+  "messages": {
+    "assessmentCreated": "¡Evaluación creada exitosamente!",
+    "assessmentUpdated": "¡Evaluación actualizada exitosamente!",
+    "assessmentDeleted": "¡Evaluación eliminada exitosamente!",
+    "assessmentImported": "¡Evaluación \"{name}\" importada exitosamente!",
+    "assessmentExported": "¡Evaluación exportada exitosamente!",
+    "confirmDelete": "¿Está seguro de que desea eliminar \"{name}\"?\n\nEsta acción no se puede deshacer.",
+    "enterName": "Por favor ingrese un nombre para la evaluación",
+    "selectCategory": "Por favor seleccione al menos una categoría para evaluar",
+    "assessmentNotFound": "Evaluación no encontrada",
+    "importError": "Error al importar la evaluación. Por favor asegúrese de que el archivo sea un archivo JSON de evaluación válido.",
+    "saveError": "Error al guardar datos. El almacenamiento de su navegador podría estar lleno.",
+    "congratulations": "¡Felicitaciones! ¡Ha completado todas las preguntas! Vea sus resultados en la página de Resultados.",
+    "unansweredQuestions": "Tiene {count} pregunta(s) sin responder.\n\nPrimera sin responder: {identifier} - {title}\n\nPor favor responda todas las preguntas antes de completar la evaluación.\n\n¿Ir a la primera pregunta sin responder?",
+    "cannotSaveEmpty": "No se puede guardar un estado vacío"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "invalidFile": "Formato de archivo inválido",
+    "fileTooLarge": "El archivo es demasiado grande"
+  }
+}
+
