@@ -298,7 +298,7 @@
     <footer class="app-footer">
         <div class="container">
             <p class="copyright">&copy; <span id="current-year">2024</span> Databricks. All rights reserved.</p>
-            <p class="version">Version 0.1.0</p>
+            <p class="version">Version 0.2.0</p>
         </div>
     </footer>
 
@@ -312,11 +312,46 @@
 
     <!-- WAF Data Loader - Loads appropriate language file -->
     <script>
-        (function() {
+        // Promise that resolves when WAF data is loaded
+        window.wafDataLoaded = new Promise((resolve, reject) => {
             const savedLang = localStorage.getItem('waf-language') || 'en';
             const dataFile = savedLang === 'en' ? 'src/js/waf-data.js' : `src/js/waf-data-${savedLang}.js`;
-            document.write(`<script src="${dataFile}?v=3"><\/script>`);
-        })();
+            
+            const script = document.createElement('script');
+            script.src = dataFile + '?v=3';
+            script.async = false; // Maintain execution order
+            
+            script.onload = () => {
+                if (typeof WAF_PILLARS_DATA !== 'undefined') {
+                    resolve();
+                } else {
+                    reject(new Error('WAF_PILLARS_DATA not defined after script load'));
+                }
+            };
+            
+            script.onerror = () => {
+                // Fallback to English if language-specific file fails
+                if (savedLang !== 'en') {
+                    console.warn(`Failed to load ${dataFile}, falling back to English`);
+                    const fallbackScript = document.createElement('script');
+                    fallbackScript.src = 'src/js/waf-data.js?v=3';
+                    fallbackScript.async = false;
+                    fallbackScript.onload = () => {
+                        if (typeof WAF_PILLARS_DATA !== 'undefined') {
+                            resolve();
+                        } else {
+                            reject(new Error('WAF_PILLARS_DATA not defined after fallback load'));
+                        }
+                    };
+                    fallbackScript.onerror = () => reject(new Error('Failed to load WAF data (including fallback)'));
+                    document.head.appendChild(fallbackScript);
+                } else {
+                    reject(new Error('Failed to load WAF data'));
+                }
+            };
+            
+            document.head.appendChild(script);
+        });
     </script>
 
     <!-- Application Scripts -->

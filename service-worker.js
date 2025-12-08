@@ -1,4 +1,4 @@
-const CACHE_NAME = 'databricks-waf-v0.2.0';
+const CACHE_NAME = 'databricks-waf-v0.2.1';
 const OFFLINE_URL = '/index.html';
 
 // Files to cache for offline use
@@ -7,9 +7,15 @@ const FILES_TO_CACHE = [
     '/index.html',
     '/src/css/main.css',
     '/src/js/waf-data.js',
+    '/src/js/waf-data-es.js',
+    '/src/js/waf-data-pt-BR.js',
     '/src/js/category-mapping.js',
     '/src/js/app.js',
     '/src/js/pwa.js',
+    '/src/js/i18n.js',
+    '/src/js/i18n/en.json',
+    '/src/js/i18n/es.json',
+    '/src/js/i18n/pt-BR.json',
     '/src/js/libs/chart.umd.js',
     '/src/js/libs/gauge.min.js',
     '/manifest.json',

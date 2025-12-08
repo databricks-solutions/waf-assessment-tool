@@ -1847,19 +1847,46 @@ class WAFApp {
     }
 }
 
-// Initialize the application when DOM is ready
+// Initialize the application when DOM is ready and WAF data is loaded
 document.addEventListener('DOMContentLoaded', async () => {
-    window.wafApp = new WAFApp();
-    await window.wafApp.init();
+    try {
+        // Wait for WAF data to be loaded (promise created in index.html)
+        if (window.wafDataLoaded) {
+            await window.wafDataLoaded;
+        } else {
+            // Fallback: check if data is already available
+            if (typeof WAF_PILLARS_DATA === 'undefined') {
+                throw new Error('WAF_PILLARS_DATA not available');
+            }
+        }
+        
+        window.wafApp = new WAFApp();
+        await window.wafApp.init();
 
-    // Handle initial page based on URL query parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const page = urlParams.get('page');
-    const action = urlParams.get('action');
+        // Handle initial page based on URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = urlParams.get('page');
+        const action = urlParams.get('action');
 
-    if (page) {
-        window.wafApp.navigateToPage(page, false);
-    } else if (action === 'new') {
-        window.wafApp.showCreateAssessmentModal();
+        if (page) {
+            window.wafApp.navigateToPage(page, false);
+        } else if (action === 'new') {
+            window.wafApp.showCreateAssessmentModal();
+        }
+    } catch (error) {
+        console.error('Failed to initialize WAF application:', error);
+        // Show user-friendly error message
+        const container = document.getElementById('main-container');
+        if (container) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px; color: #dc3545;">
+                    <h2>Failed to Load Application</h2>
+                    <p>There was an error loading the assessment data. Please try refreshing the page.</p>
+                    <button onclick="window.location.reload()" style="margin-top: 20px; padding: 10px 20px; cursor: pointer;">
+                        Reload Page
+                    </button>
+                </div>
+            `;
+        }
     }
 });
