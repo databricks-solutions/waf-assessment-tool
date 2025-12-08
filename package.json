@@ -1,0 +1,26 @@
+{
+  "name": "databricks-waf-assessment",
+  "version": "1.4.0",
+  "description": "Databricks Well Architected Framework Assessment Tool",
+  "private": true,
+  "scripts": {
+    "postinstall": "node scripts/copy-libs.js"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.1",
+    "canvas-gauges": "^2.1.7"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "databricks",
+    "well-architected-framework",
+    "assessment",
+    "pwa"
+  ],
+  "author": "Databricks",
+  "license": "UNLICENSED"
+}
