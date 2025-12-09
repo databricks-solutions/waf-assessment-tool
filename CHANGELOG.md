@@ -5,6 +5,25 @@ All notable changes to the Databricks WAF Assessment Tool will be documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.4] - 2024-12-09
+
+### Added
+- **Analysis by Pillar Section** in Results page
+  - Detailed breakdown of scores grouped by Principle within each Pillar
+  - Accordion component for collapsible pillar groups
+  - Summary metrics in accordion headers (percentage, score, item count)
+  - Sorted items by percentage (descending) for quick insights
+  - Visual percentage bars for each principle
+  - Compact and optimized layout with reduced vertical spacing
+
+### Changed
+- Moved action buttons (Export/Continue) to the end of Results page
+- Optimized spacing throughout Analysis section for better readability
+- Improved visual hierarchy with summary information in accordion headers
+
+### Removed
+- Removed "By Best Practice" column (keeping only "By Principle" analysis)
+
 ## [0.2.0] - 2024-12-08
 
 ### Added
