@@ -171,6 +171,10 @@ class WAFApp {
 
         // Handle before unload (warn user if assessment in progress)
         window.addEventListener('beforeunload', (e) => {
+            // Skip confirmation if language is being changed intentionally
+            if (window._wafLanguageChanging) {
+                return;
+            }
             if (this.hasUnsavedChanges()) {
                 e.preventDefault();
                 e.returnValue = '';
@@ -213,9 +217,9 @@ class WAFApp {
         // Update current page
         this.currentPage = pageName;
 
-        // Update browser history
+        // Update browser history (using relative paths to support subdirectory deployments)
         if (updateHistory) {
-            const url = pageName === 'home' ? '/' : `/?page=${pageName}`;
+            const url = pageName === 'home' ? './' : `./?page=${pageName}`;
             history.pushState({ page: pageName }, '', url);
         }
 
@@ -991,8 +995,8 @@ class WAFApp {
                 valueDec: 0,
                 animationRule: "linear",
                 animationDuration: 1200,
-                fontValueSize: 30,
-                fontUnitsSize: 14,
+                fontValueSize: 22,
+                fontUnitsSize: 12,
                 borders: false,
                 borderShadowWidth: 0,
                 needleType: "arrow",

@@ -40,7 +40,8 @@ def extract_waf_questions(excel_path):
             'Principles',
             'Best Practice',
             'Databricks Capabilities',
-            'Details'
+            'Details',
+            'Databricks Solution'  # Alternative column name used in some sheets
         ]
 
         # Check which columns exist

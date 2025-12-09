@@ -2001,7 +2001,7 @@ a:focus-visible {
 .pillar-nav-item.completed::after {
     content: '✓';
     position: absolute;
-    top: 50%;
+    top: 21px; /* Alinhado com a linha do nome do pilar (8px padding + 13px half-height do número) */
     right: var(--spacing-sm);
     transform: translateY(-50%);
     width: 20px;

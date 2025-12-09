@@ -142,7 +142,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Definir estándares para integración",
         "title": "Usar patrones de integración reutilizables para integración externa",
         "capabilities": "Automatización",
-        "details": null,
+        "details": "Los estándares de integración son importantes porque proporcionan directrices sobre cómo los datos deben ser representados, intercambiados y procesados entre diferentes sistemas y aplicaciones. Estos estándares ayudan a garantizar que los datos sean compatibles, de alta calidad e interoperables entre varias fuentes y destinos.\n\nEl Databricks Lakehouse viene con una API REST integral que permite gestionar prácticamente todos los aspectos de la plataforma de forma programática. El servidor de la API REST corre en el plano de control y proporciona un endpoint unificado para gestionar la plataforma Databricks.\n\nLa API REST proporciona el nivel más bajo de integración que siempre puede usarse. Sin embargo, la forma preferida de integrar con Databricks es usar abstracciones de nivel superior, como los SDKs de Databricks o herramientas CLI. Las herramientas CLI están basadas en shell y permiten integrar fácilmente la plataforma Databricks en workflows de CI/CD y MLOps.\n\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       },
@@ -152,7 +152,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Definir estándares para integración",
         "title": "Usar conectores optimizados para ingerir fuentes de datos en el lakehouse",
         "capabilities": "Lakehouse Federation",
-        "details": null,
+        "details": "Databricks proporciona conectores optimizados para servicios de mensajería como Apache Kafka para ingestión de datos en tiempo casi real.\nDatabricks proporciona integraciones integradas con muchos sistemas de datos nativos de la nube, además de soporte JDBC extensible para conectar con otros sistemas de datos.\n\nUna opción para integrar fuentes de datos sin ETL es Lakehouse Federation. Lakehouse Federation es la plataforma de federación de consultas de Databricks. El término federación de consultas describe un conjunto de características que permiten a usuarios y sistemas ejecutar consultas contra múltiples fuentes de datos sin tener que migrar todos los datos a un sistema unificado. Databricks usa Unity Catalog para gestionar la federación de consultas. Las herramientas de gobernanza de datos y linaje de datos de Unity Catalog garantizan que el acceso a los datos sea gestionado y auditado para todas las consultas federadas ejecutadas por usuarios en sus workspaces de Databricks.\n\nCualquier consulta en la plataforma Databricks que use una fuente de Lakehouse Federation será enviada a esa fuente. Asegúrese de que el sistema de origen pueda manejar la carga. También tenga en cuenta que si el sistema de origen está desplegado en una región de nube o nube diferente, habrá un costo de egress por cada consulta.\n\nConsidere descargar el acceso a bases de datos subyacentes mediante vistas materializadas para evitar cargas altas/concurrentes en bases de datos operacionales y reducir costos de egress.\n\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       },
@@ -162,7 +162,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Definir estándares para integración",
         "title": "Usar herramientas de socios certificados",
         "capabilities": "Databricks Partner Connect",
-        "details": null,
+        "details": "Usar herramientas de socios certificados facilita la conexión de datos entre dos sistemas. Estas integraciones permiten usar las soluciones de los socios manteniendo sus datos unificados en el Lakehouse.\n\nLas empresas tienen diferentes necesidades, y ninguna herramienta única puede satisfacer todas. Partner Connect le permite explorar e integrar fácilmente con nuestros socios, que cubren todos los aspectos del lakehouse: ingestión de datos, preparación y transformación, BI y visualización, machine learning, calidad de datos, y más. Partner Connect le permite crear cuentas de prueba con socios tecnológicos seleccionados de Databricks y conectar su workspace de Databricks a soluciones de socios desde la UI de Databricks. Pruebe soluciones de socios usando sus datos en el lakehouse de Databricks, y luego adopte las soluciones que mejor satisfagan las necesidades de su negocio.\n\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       },
@@ -172,7 +172,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Definir estándares para integración",
         "title": "Reducir complejidad de pipelines de ingeniería de datos",
         "capabilities": "Delta Live Tables; Autoloader",
-        "details": null,
+        "details": "Invertir en reducir la complejidad de los pipelines de ingeniería de datos permite escalabilidad, agilidad y flexibilidad para expandir e innovar más rápidamente. Los pipelines simplificados facilitan la gestión y adaptación de todas las necesidades operacionales de un pipeline de ingeniería de datos: orquestación de tareas, gestión de clusters, monitoreo, calidad de datos y manejo de errores.\n\nDelta Live Tables es un framework para construir pipelines de procesamiento de datos confiables, mantenibles y probables. Usted define las transformaciones a realizar en sus datos, y Delta Live Tables gestiona la orquestación de tareas, gestión de clusters, monitoreo, calidad de datos y manejo de errores.\n\nAuto Loader procesa archivos de datos nuevos de forma incremental y eficiente conforme llegan al almacenamiento en nube. Puede leer archivos de datos del almacenamiento en nube de forma confiable. Un aspecto esencial tanto de Delta Live Tables como de Auto Loader es su naturaleza declarativa: Sin ellos, es necesario construir pipelines complejos que integren diferentes servicios de nube - como un servicio de notificación y un servicio de colas - para leer archivos de nube de forma confiable basándose en eventos y permitir la combinación de fuentes batch y streaming de forma confiable.\n\nAuto Loader y Delta Live Tables reducen las dependencias del sistema y la complejidad, mejorando significativamente la interoperabilidad con el almacenamiento en nube y entre diferentes paradigmas como batch y streaming.\n\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       },
@@ -182,7 +182,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Utilizar interfaces y formatos de datos abiertos",
         "title": "Usar formatos de datos abiertos",
         "capabilities": "Delta Lake",
-        "details": null,
+        "details": "Usar un formato de datos abierto significa que no hay restricciones en su uso. Esto es importante porque elimina barreras para acceder y usar los datos para análisis y generar insights de negocio. Los formatos abiertos, como los construidos sobre Apache Spark, también agregan características que mejoran el rendimiento con soporte para transacciones ACID, streaming unificado y procesamiento de datos en batch. Además, el código abierto es impulsado por la comunidad, lo que significa que la comunidad está constantemente trabajando en mejorar características existentes y agregar nuevas, facilitando a los usuarios obtener el máximo de sus proyectos.\n\nEl framework Delta Lake tiene muchas ventajas, desde características de confiabilidad hasta mejoras de alto rendimiento, y también es un formato de datos completamente abierto. Además, Delta Lake viene con una biblioteca Delta Standalone, que abre el formato Delta para proyectos de desarrollo. Es una biblioteca Java de nodo único que puede leer y escribir en tablas Delta. Docenas de herramientas y aplicaciones de terceros soportan Delta Lake.\n\nUniForm aprovecha el hecho de que tanto Delta Lake como Iceberg consisten en archivos de datos Parquet y una capa de metadatos. UniForm genera automáticamente metadatos Iceberg de forma asíncrona, permitiendo que los clientes Iceberg lean tablas Delta como si fueran tablas Iceberg.\n\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       },
@@ -192,7 +192,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Utilizar interfaces y formatos de datos abiertos",
         "title": "Habilitar compartición segura de datos para todos los activos",
         "capabilities": "Delta Sharing",
-        "details": null,
+        "details": "Compartir datos puede llevar a mejor colaboración y toma de decisiones. Sin embargo, al compartir datos, es importante mantener control sobre el uso de los datos, garantizar confidencialidad y establecer directrices para la recolección, almacenamiento, procesamiento y compartición de datos - para proteger sus datos y garantizar cumplimiento con leyes y regulaciones relevantes sobre compartición de datos.\n\nDelta Sharing proporciona una solución abierta para compartir datos en vivo de su lakehouse de forma segura a cualquier plataforma de computación. Los destinatarios no necesitan estar en la plataforma Databricks, en la misma nube, o en cualquier nube. Delta Sharing está nativamente integrado con Unity Catalog, permitiendo que las organizaciones gestionen y auditen centralmente los datos compartidos en toda la empresa y compartan activos de datos con confianza mientras cumplen con los requisitos de seguridad y cumplimiento.\n\nLos proveedores de datos pueden compartir datos en vivo desde donde residen en su almacenamiento en nube sin replicar o mover a otro sistema. Este enfoque reduce los costos operacionales de compartición de datos porque los proveedores de datos no necesitan replicar datos múltiples veces entre nubes, geografías o plataformas de datos para cada uno de sus consumidores de datos.\n\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       },
@@ -202,7 +202,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Utilizar interfaces y formatos de datos abiertos",
         "title": "Usar estándares abiertos para flujos de trabajo de IA",
         "capabilities": "MLFlow",
-        "details": null,
+        "details": "Al igual que usar un formato de datos de código abierto, usar estándares abiertos para sus flujos de trabajo de IA tiene beneficios similares de flexibilidad, agilidad, costo y seguridad.\n\nMLflow es una plataforma de código abierto para gestionar el ciclo de vida de ML, incluyendo experimentación, reproducibilidad, despliegue y un registro central de modelos. Usar MLflow en Databricks proporciona ambas ventajas: Puede escribir su flujo de trabajo de ML usando una herramienta abierta y portable y usar servicios confiables operados por Databricks (Tracking Server, Model Registry). También agrega serving de modelos empresarial y escalable, permitiendo hospedar modelos MLflow como endpoints REST.\n\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       },
@@ -212,7 +212,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Simplificar implementación de nuevos casos de uso",
         "title": "Proporcionar experiencia de autoservicio en toda la plataforma",
         "capabilities": "Databricks Data Intelligence Platform",
-        "details": null,
+        "details": "Hay varios beneficios de una plataforma donde los usuarios tienen autonomía para usar las herramientas y capacidades según sus necesidades. Invertir en crear una plataforma de autoservicio facilita la escalabilidad para atender a más usuarios e impulsa mayor eficiencia minimizando la necesidad de involucramiento humano para aprovisionar usuarios, resolver problemas y procesar solicitudes de acceso.\n\nLa Databricks Data Intelligence Platform tiene todas las capacidades requeridas para proporcionar una experiencia de autoservicio. Aunque puede haber un paso de aprobación obligatorio, la mejor práctica es automatizar completamente la configuración cuando una unidad de negocio solicita acceso al lakehouse. Aprovisione automáticamente su nuevo entorno, sincronice usuarios y use SSO para autenticación, proporcione control de acceso a datos comunes y almacenamientos de objetos separados para sus propios datos, y así sucesivamente. Junto con un catálogo de datos central que contiene conjuntos de datos semánticamente consistentes y listos para negocios, esto proporciona acceso rápido y seguro para nuevas unidades de negocio a las capacidades del Lakehouse y a los datos que necesitan.\n\nBlog",
         "type": "status",
         "status": "open"
       },
@@ -222,7 +222,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Simplificar implementación de nuevos casos de uso",
         "title": "Usar servicios serverless",
         "capabilities": "Databricks Serverless SQL;\nServerless Workflows;\nServerless Notebooks",
-        "details": null,
+        "details": "Usar serverless tiene múltiples beneficios más allá de solo ahorros de costos, escalabilidad y rendimiento. El desarrollo es más rápido cuando los desarrolladores pueden enfocarse en el código en lugar de la infraestructura. También tienen mayor flexibilidad en cómo diseñan sus aplicaciones.\n\nPara cómputo serverless en la plataforma Databricks, la capa de cómputo corre en la cuenta de Databricks del cliente. Los administradores de nube ya no tienen que gestionar entornos de nube complejos que involucran ajustar cuotas, crear y mantener activos de red y unir fuentes de facturación. Los usuarios se benefician de tiempos de espera casi nulos para el inicio de clusters y mejor concurrencia en sus consultas.\n\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       },
@@ -232,7 +232,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Simplificar implementación de nuevos casos de uso",
         "title": "Usar plantillas de cómputo predefinidas",
         "capabilities": "Databricks Cluster Policies",
-        "details": null,
+        "details": "Las plantillas de cómputo predefinidas pueden ayudar a traer algunos de los beneficios de serverless cuando no está disponible para una herramienta particular o en su región. Principalmente, estas plantillas eliminan la necesidad de que los desarrolladores aprovisionen su propio cómputo y determinen las necesidades de infraestructura, acelerando así el tiempo de desarrollo.\n\nElimine la carga de definir un cluster (tipo de VM, tamaño de nodo y tamaño de cluster) de los usuarios finales. Esto puede lograrse de las siguientes maneras:\n\n- Proporcione clusters compartidos como entornos inmediatos para usuarios. En estos clusters, use auto scaling hasta un mínimo muy bajo de nodos para evitar altos costos de inactividad.\n\n- Use políticas de cluster para definir clusters de tamaño estándar (P, M, G) para proyectos como un entorno de trabajo estandarizado.\n\nBlog\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       },
@@ -242,7 +242,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Simplificar implementación de nuevos casos de uso",
         "title": "Usar capacidades de IA para aumentar productividad",
         "capabilities": "Databricks Assistant",
-        "details": null,
+        "details": "Además de aumentar la productividad, las herramientas de IA también pueden ayudar a identificar patrones en errores y proporcionar insights adicionales basados en la entrada. En general, incorporar estas herramientas en el proceso de desarrollo puede reducir significativamente los errores y facilitar la toma de decisiones - llevando a un tiempo más rápido para el lanzamiento.\n\nDatabricks Assistant le permite consultar datos a través de una interfaz conversacional, haciéndolo más productivo dentro de Databricks. Describa su tarea en lenguaje natural y deje que el Assistant genere consultas SQL, explique código complejo y corrija errores automáticamente. El Assistant aprovecha los metadatos de Unity Catalog para entender sus tablas, columnas, descripciones y activos de datos populares en su empresa para proporcionar respuestas personalizadas para usted.\n\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       },
@@ -252,7 +252,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Asegurar consistencia y usabilidad de datos",
         "title": "Ofrecer datos como productos reutilizables confiables",
         "capabilities": null,
-        "details": null,
+        "details": "Datos como productos es una estrategia de datos que puede ayudar a las organizaciones a aprovechar todo el potencial de sus activos de datos. Transforma datos crudos en un producto estructurado, accesible y valioso.\n\nProducir datos como producto de alta calidad es un objetivo primario de cualquier plataforma de datos. La idea es que los equipos de ingeniería de datos apliquen pensamiento de producto a los datos curados: Los activos de datos son sus productos, y los científicos de datos, ingenieros de ML y BI, o cualquier otro equipo de negocio que consume datos son sus clientes. Estos clientes deben poder descubrir, acceder y crear valor a partir de estos datos como productos a través de una experiencia de autoservicio sin la intervención de los equipos de datos especializados.\n\neBook",
         "type": "status",
         "status": "open"
       },
@@ -262,7 +262,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Asegurar consistencia y usabilidad de datos",
         "title": "Publicar productos de datos semánticamente consistentes",
         "capabilities": null,
-        "details": null,
+        "details": "Un data lake generalmente contiene datos de diferentes sistemas de origen. Estos sistemas a veces nombran el mismo concepto de forma diferente (como cliente vs. cuenta) o significan conceptos diferentes por el mismo identificador. Para que los usuarios de negocio combinen fácilmente estos conjuntos de datos de manera significativa, los datos deben hacerse homogéneos entre todas las fuentes para ser semánticamente consistentes. Además, para que algunos datos sean valiosos para análisis, las reglas de negocio internas deben aplicarse correctamente, como el reconocimiento de ingresos. Para asegurar que todos los usuarios estén usando los datos correctamente interpretados, los conjuntos de datos con estas reglas deben hacerse disponibles y publicarse en Unity Catalog. El acceso a los datos de origen debe limitarse a los equipos que entienden el uso correcto.\n\neBook",
         "type": "status",
         "status": "open"
       },
@@ -272,7 +272,7 @@ const WAF_PILLARS_DATA = [
         "principle": "Asegurar consistencia y usabilidad de datos",
         "title": "Proporcionar catálogo central para descubrimiento y linaje",
         "capabilities": "Unity Catalog",
-        "details": null,
+        "details": "Un catálogo central para descubrimiento y linaje ayuda a los consumidores de datos a acceder a datos de múltiples fuentes en toda la empresa, reduciendo así la sobrecarga operacional para el equipo central de gobernanza.\n\nEn Unity Catalog, los administradores y responsables de datos gestionan usuarios y su acceso a datos centralmente en todos los workspaces en una cuenta de Databricks. Los usuarios en diferentes workspaces pueden compartir los mismos datos y, dependiendo de los privilegios de usuario otorgados centralmente en Unity Catalog, pueden acceder a datos juntos.\n\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       }
@@ -347,9 +347,9 @@ const WAF_PILLARS_DATA = [
         "id": "OE-01-07",
         "identifier": "OE-01-07",
         "principle": "Optimizar procesos de construcción y lanzamiento",
-        "title": "Usar Unity Catalog para gestión del ciclo de vida de modelos",
+        "title": "Definir estrategia de catálogo para su empresa usando Unity Catalog",
         "capabilities": "Unity Catalog",
-        "details": null,
+        "details": "Una estrategia de catálogo bien definida es esencial para organizar y gobernar activos de datos en toda su empresa. Unity Catalog proporciona una solución de gobernanza unificada que le permite gestionar el acceso a datos, modelos de IA y otros activos en múltiples workspaces y plataformas de nube.\n\nConsideraciones clave para su estrategia de catálogo incluyen:\n- Convenciones de nomenclatura de catálogo alineadas con unidades de negocio, entornos o dominios de datos\n- Organización de schemas que refleje su arquitectura de datos (capas bronze, silver, gold)\n- Políticas de control de acceso usando permisos granulares de Unity Catalog\n- Clasificación y etiquetado de datos para cumplimiento y descubrimiento\n- Compartición de datos entre workspaces usando el metastore centralizado de Unity Catalog\n\nAWS | Azure | GCP",
         "type": "status",
         "status": "open"
       },
@@ -679,6 +679,256 @@ const WAF_PILLARS_DATA = [
         "details": null,
         "type": "status",
         "status": "open"
+      },
+      {
+        "id": "SCP-02-01",
+        "identifier": "SCP-02-01",
+        "principle": "Proteger datos en tránsito y en reposo",
+        "title": "Evitar almacenar datos sensibles en DBFS root",
+        "capabilities": "Databricks Workspace",
+        "details": "Debido a que el DBFS root es accesible para todos los usuarios en un workspace, todos los usuarios pueden acceder a cualquier dato almacenado allí. Es importante instruir a los usuarios para evitar usar esta ubicación para almacenar datos sensibles. La ubicación predeterminada para tablas gestionadas en el Hive metastore en Databricks es el DBFS root; para evitar que los usuarios finales que crean tablas gestionadas escriban en el DBFS root, declare una ubicación en almacenamiento externo al crear bases de datos en el Hive metastore.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-02-02",
+        "identifier": "SCP-02-02",
+        "principle": "Proteger datos en tránsito y en reposo",
+        "title": "Usar Unity Catalog para gestionar acceso al almacenamiento en nube",
+        "capabilities": "Unity Catalog",
+        "details": "Databricks recomienda usar Unity Catalog para gestionar el acceso a todos los datos almacenados en almacenamiento de objetos en la nube. Unity Catalog proporciona un conjunto de herramientas para configurar conexiones seguras al almacenamiento de objetos en la nube.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-02-03",
+        "identifier": "SCP-02-03",
+        "principle": "Proteger datos en tránsito y en reposo",
+        "title": "Implementar protección contra exfiltración de datos",
+        "capabilities": "Databricks Workspace",
+        "details": "https://www.databricks.com/blog/2021/02/02/data-exfiltration-protection-with-databricks-on-aws.html",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-02-04",
+        "identifier": "SCP-02-04",
+        "principle": "Proteger datos en tránsito y en reposo",
+        "title": "Usar versionado de bucket S3 para redundancia adicional",
+        "capabilities": "Cloud",
+        "details": "Puede usar el versionado de bucket S3 para proporcionar redundancia adicional para datos almacenados con Delta Lake. Databricks recomienda implementar una política de gestión de ciclo de vida para todos los buckets S3 con versionado habilitado. Databricks recomienda mantener tres versiones.",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-02-05",
+        "identifier": "SCP-02-05",
+        "principle": "Proteger datos en tránsito y en reposo",
+        "title": "Usar ubicaciones externas para control de acceso",
+        "capabilities": "Unity Catalog",
+        "details": "Una ubicación externa es un objeto que combina una ruta de almacenamiento en nube con una credencial de almacenamiento que autoriza el acceso a la ruta de almacenamiento en nube. Cada ubicación de almacenamiento está sujeta a las políticas de control de acceso de Unity Catalog que controlan qué usuarios y grupos pueden acceder a la credencial. Si un usuario no tiene acceso a una ubicación de almacenamiento en Unity Catalog, la solicitud falla y Unity Catalog no intenta autenticar en su tenant de nube en nombre del usuario.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-02-06",
+        "identifier": "SCP-02-06",
+        "principle": "Proteger datos en tránsito y en reposo",
+        "title": "Usar claves gestionadas por el cliente para cifrado",
+        "capabilities": "Unity Catalog",
+        "details": "Databricks tiene dos casos de uso de claves gestionadas por el cliente que involucran diferentes tipos de datos y ubicaciones:\n\nServicios gestionados: Datos en el plano de control de Databricks (notebooks, secretos y datos de consulta de Databricks SQL).\nAlmacenamiento del workspace: Sus buckets S3 raíz del workspace y los volúmenes EBS de recursos de cómputo en el plano de cómputo clásico.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-02-07",
+        "identifier": "SCP-02-07",
+        "principle": "Proteger datos en tránsito y en reposo",
+        "title": "Configurar protección contra exfiltración de datos en la red",
+        "capabilities": "Databricks Workspace",
+        "details": "https://www.databricks.com/blog/2021/02/02/data-exfiltration-protection-with-databricks-on-aws.html",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-03-01",
+        "identifier": "SCP-03-01",
+        "principle": "Proteger su red e identificar y proteger endpoints",
+        "title": "Usar VPC gestionada por el cliente",
+        "capabilities": "Cloud",
+        "details": "Por defecto, los clusters se crean en una sola AWS VPC (Virtual Private Cloud) que Databricks crea y configura en su cuenta de AWS. Opcionalmente puede crear sus workspaces de Databricks en su propia VPC, una característica conocida como VPC gestionada por el cliente. Puede usar una VPC gestionada por el cliente para ejercer más control sobre sus configuraciones de red para cumplir con estándares específicos de seguridad y gobernanza de nube que su organización pueda requerir. Para configurar su workspace para usar AWS Private Link para cualquier tipo de conexión, su workspace debe usar una VPC gestionada por el cliente.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-03-02",
+        "identifier": "SCP-03-02",
+        "principle": "Proteger su red e identificar y proteger endpoints",
+        "title": "Configurar listas de acceso IP",
+        "capabilities": "Cloud",
+        "details": "https://docs.databricks.com/en/security/network/front-end/ip-access-list.html",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-03-03",
+        "identifier": "SCP-03-03",
+        "principle": "Proteger su red e identificar y proteger endpoints",
+        "title": "Implementar controles de exfiltración de red",
+        "capabilities": "Cloud",
+        "details": "https://www.databricks.com/blog/2021/02/02/data-exfiltration-protection-with-databricks-on-aws.html",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-03-04",
+        "identifier": "SCP-03-04",
+        "principle": "Proteger su red e identificar y proteger endpoints",
+        "title": "Implementar políticas de acceso privado a la consola",
+        "capabilities": "Databricks Workspace",
+        "details": "https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/implementing-console-private-access-policies.html",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-03-05",
+        "identifier": "SCP-03-05",
+        "principle": "Proteger su red e identificar y proteger endpoints",
+        "title": "Configurar políticas de acceso a endpoints VPC",
+        "capabilities": "IP access List",
+        "details": "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-access.html",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-03-06",
+        "identifier": "SCP-03-06",
+        "principle": "Proteger su red e identificar y proteger endpoints",
+        "title": "Usar Private Link para conectividad segura",
+        "capabilities": "Private link",
+        "details": "https://docs.databricks.com/en/security/network/classic/privatelink.html",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-04-01",
+        "identifier": "SCP-04-01",
+        "principle": "Revisar el Modelo de Responsabilidad Compartida",
+        "title": "Entender el modelo de responsabilidad compartida",
+        "capabilities": "Shared Responsibility Model",
+        "details": "El modelo de responsabilidad compartida de Databricks describe las obligaciones de seguridad y cumplimiento de Databricks, del proveedor de servicios en nube y del cliente con respecto a los datos y servicios en la plataforma Databricks.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-05-01",
+        "identifier": "SCP-05-01",
+        "principle": "Cumplir requisitos de cumplimiento y privacidad de datos",
+        "title": "Seguir la guía de seguridad y cumplimiento",
+        "capabilities": "Security and Compliance Guide",
+        "details": "https://docs.databricks.com/en/security/index.html",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-06-01",
+        "identifier": "SCP-06-01",
+        "principle": "Monitorear seguridad del sistema",
+        "title": "Usar herramientas de observabilidad como Overwatch",
+        "capabilities": "Unity Catalog",
+        "details": "https://community.databricks.com/t5/technical-blog/overwatch-the-observability-tool-for-databricks/ba-p/54120",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-06-02",
+        "identifier": "SCP-06-02",
+        "principle": "Monitorear seguridad del sistema",
+        "title": "Usar tablas de sistema para logs de auditoría",
+        "capabilities": "Unity Catalog",
+        "details": "https://docs.databricks.com/en/administration-guide/system-tables/audit-logs.html",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-06-03",
+        "identifier": "SCP-06-03",
+        "principle": "Monitorear seguridad del sistema",
+        "title": "Analizar logs de auditoría regularmente",
+        "capabilities": "Unity Catalog",
+        "details": "https://docs.databricks.com/en/administration-guide/system-tables/audit-logs.html",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-06-04",
+        "identifier": "SCP-06-04",
+        "principle": "Monitorear seguridad del sistema",
+        "title": "Usar perfil de seguridad de cumplimiento",
+        "capabilities": "Databricks Compliance security profile",
+        "details": "Enhanced Security Monitoring (ESM) y Compliance Security Profile (CSP) proporcionan la base de seguridad más segura para despliegues de Databricks.\nEnhanced Security Monitoring proporciona:\n1. Una AMI con hardening CIS Level 1 mejorado\n2. Monitoreo de malware basado en comportamiento y monitoreo de integridad de archivos (Capsule8)\n3. Detección de malware y antivirus (ClamAV)\n4. Reportes de vulnerabilidad Qualys de un host OS representativo\nCompliance Security Profile toma todos los beneficios anteriores y agrega controles de seguridad adicionales requeridos para cumplir con los requisitos de cumplimiento:\n1. Módulos de cifrado validados FIPS 140-2 Level 1 (donde sea posible)\n2. Aplicación de AWS Nitro VM para cifrado de datos en reposo y en tránsito\n3. Aplicación de actualización de cluster (reinicio automático después de 25 días)\n4. Características y controles compatibles con HIPAA, PCI-DSS, FedRAMP Moderate\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-06-05",
+        "identifier": "SCP-06-05",
+        "principle": "Monitorear seguridad del sistema",
+        "title": "Usar etiquetas para rastrear uso y facturación",
+        "capabilities": "Tagging",
+        "details": "Para rastrear el uso de Databricks a través de la facturación de recursos AWS, puede configurar etiquetas en clusters o pools. Estas también pueden aplicarse mediante políticas de cluster para diferentes grupos dentro de su organización.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-07-01",
+        "identifier": "SCP-07-01",
+        "principle": "Controles genéricos",
+        "title": "Usar instancias AWS Nitro para seguridad mejorada",
+        "capabilities": "Databricks Compliance security profile",
+        "details": "Las instancias AWS Nitro pueden proporcionar dos grandes beneficios de seguridad:\n1. Las instancias AWS Nitro usan discos NVMe que cifran automáticamente datos en reposo. De la documentación de AWS del 19 de julio de 2021:\nLos datos en el almacenamiento de instancia NVMe se cifran usando un cifrado de bloque XTS-AES-256 implementado en un módulo de hardware en la instancia. Las claves de cifrado se generan usando el módulo de hardware y son únicas para cada dispositivo de almacenamiento de instancia NVMe. Todas las claves de cifrado se destruyen cuando la instancia se detiene o termina y no pueden recuperarse. No puede deshabilitar este cifrado y no puede proporcionar su propia clave de cifrado.\n2. Muchas instancias AWS Nitro también cifran automáticamente datos en tránsito entre hosts. Puede configurar tipos de instancia incluidos en la sección Encryption in Transit de la documentación de AWS Nitro para que el tráfico intra-cluster (inter-host) se cifre en tránsito.\nDatabricks no puede proporcionar autoridad sobre detalles de capacidades en AWS, y la información anterior se proporciona con el mejor esfuerzo como conveniencia para clientes de Databricks.",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-07-02",
+        "identifier": "SCP-07-02",
+        "principle": "Controles genéricos",
+        "title": "Entender cuotas y límites de la plataforma",
+        "capabilities": "Databricks Quotas",
+        "details": "Todo servicio lanzado en una nube tendrá que tomar en cuenta límites, como límites de tasa de acceso, número de instancias, número de usuarios y requisitos de memoria. Para su proveedor de nube, verifique los límites de la nube. Antes de diseñar una solución, estos límites deben ser comprendidos.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-07-03",
+        "identifier": "SCP-07-03",
+        "principle": "Controles genéricos",
+        "title": "Usar CI/CD con escaneo de código para cargas de trabajo sensibles",
+        "capabilities": "Cloud",
+        "details": "Organizaciones maduras frecuentemente construyen cargas de trabajo de producción usando CI/CD para integrar escaneo de código, mejor control de permisos, realizar linting y más. Cuando hay datos altamente sensibles siendo analizados, un proceso de CI/CD también puede permitir el escaneo de escenarios conocidos, como secretos codificados.",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-07-04",
+        "identifier": "SCP-07-04",
+        "principle": "Controles genéricos",
+        "title": "Usar aislamiento de workspace para cargas de trabajo sensibles",
+        "capabilities": "Databricks Workspace",
+        "details": "Aunque Databricks tiene numerosas capacidades para aislar diferentes cargas de trabajo, como ACLs de tabla e IAM passthrough para cargas de trabajo muy sensibles, el método de aislamiento principal es mover cargas de trabajo sensibles a un workspace diferente. Esto a veces sucede cuando un cliente tiene equipos muy diferentes (por ejemplo, un equipo de seguridad y un equipo de marketing) que deben analizar datos diferentes en Databricks.\n\nBlog",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "SCP-07-05",
+        "identifier": "SCP-07-05",
+        "principle": "Controles genéricos",
+        "title": "Hospedar repositorios propios de bibliotecas para ataques a la cadena de suministro",
+        "capabilities": "Databricks Libraries",
+        "details": "Por defecto, Databricks permite a los clientes instalar bibliotecas Python, R o Scala de los repositorios públicos estándar, como pypi, CRAN o maven.\nAquellos que están preocupados por ataques a la cadena de suministro pueden hospedar sus propios repositorios y luego configurar Databricks para usarlos. Puede bloquear el acceso a otras fuentes de bibliotecas. La documentación para hacer esto está fuera del alcance de este documento, pero contacte a su equipo de Databricks para asistencia según sea necesario.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
       }
     ]
   },
@@ -744,6 +994,136 @@ const WAF_PILLARS_DATA = [
         "title": "Usar manejo de errores apropiado",
         "capabilities": null,
         "details": null,
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-02-01",
+        "identifier": "R-02-01",
+        "principle": "Gestionar calidad de datos",
+        "title": "Usar arquitectura de almacenamiento en capas",
+        "capabilities": "Databricks Lakehouse Architecture",
+        "details": "Curar datos creando una arquitectura en capas y asegurando que la calidad de los datos aumente a medida que los datos se mueven a través de las capas. Un enfoque común de capas es:\n\nCapa bruta (bronze): Los datos de origen se ingestan en el lakehouse en la primera capa y deben persistirse allí. Cuando todos los datos downstream se crean a partir de la capa bruta, reconstruir las capas subsiguientes desde esta capa es posible si es necesario.\n\nCapa curada (silver): El propósito de la segunda capa es mantener datos limpios, refinados, filtrados y agregados. El objetivo de esta capa es proporcionar una base sólida y confiable para análisis e informes en todas las funciones y roles.\n\nCapa final (gold): La tercera capa se crea alrededor de las necesidades de negocios o proyectos. Proporciona una vista diferente como productos de datos para otras unidades de negocio o proyectos, preparando datos alrededor de necesidades de seguridad (como datos anonimizados) u optimizando para rendimiento (como con vistas pre-agregadas). Los productos de datos en esta capa se ven como la verdad para el negocio.\n\nLa capa final debe contener solo datos de alta calidad y puede ser totalmente confiable desde el punto de vista de negocios.\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-02-02",
+        "identifier": "R-02-02",
+        "principle": "Gestionar calidad de datos",
+        "title": "Mejorar integridad de datos reduciendo redundancia",
+        "capabilities": "Databricks Platform",
+        "details": "Copiar o duplicar datos crea redundancia de datos y llevará a pérdida de integridad, pérdida de linaje de datos y frecuentemente diferentes permisos de acceso. Esto disminuirá la calidad de los datos en el lakehouse. Una copia temporal o desechable de datos no es dañina por sí misma - a veces es necesaria para impulsar agilidad, experimentación e innovación. Sin embargo, si estas copias se vuelven operacionales y regularmente usadas para decisiones de negocio, se convierten en silos de datos. Estos silos de datos desincronizándose tiene un impacto negativo significativo en la integridad y calidad de los datos, planteando preguntas como '¿Qué conjunto de datos es el maestro?' o '¿El conjunto de datos está actualizado?'.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-02-03",
+        "identifier": "R-02-03",
+        "principle": "Gestionar calidad de datos",
+        "title": "Gestionar esquemas activamente",
+        "capabilities": "Unity Catalog",
+        "details": "Cambios de esquema no controlados pueden llevar a datos inválidos y trabajos fallando que usan esos conjuntos de datos. Databricks tiene varios métodos para validar y aplicar el esquema:\n\nDelta Lake soporta validación de esquema y aplicación de esquema manejando automáticamente variaciones de esquema para evitar la inserción de registros malos durante la ingestión.\n\nAuto Loader detecta la adición de nuevas columnas a medida que procesa sus datos. Por defecto, la adición de una nueva columna hace que sus streams se detengan con una UnknownFieldException. Auto Loader soporta varios modos para evolución de esquema.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-02-04",
+        "identifier": "R-02-04",
+        "principle": "Gestionar calidad de datos",
+        "title": "Usar constraints y expectations de datos",
+        "capabilities": "Delta Live Tables",
+        "details": "Las tablas Delta soportan cláusulas estándar de gestión de constraints SQL que aseguran que la calidad e integridad de los datos agregados a una tabla se verifiquen automáticamente. Cuando un constraint se viola, Delta Lake lanza un error InvariantViolationException para señalar que los nuevos datos no pueden agregarse. Vea Constraints en Databricks.\n\nPara mejorar aún más este manejo, Delta Live Tables soporta Expectations: Expectations definen constraints de calidad de datos en el contenido de un conjunto de datos. Una expectation consiste en una descripción, un invariante y una acción a tomar cuando un registro falla el invariante. Expectations para consultas usan decoradores Python o cláusulas de constraint SQL. Vea Manage data quality with Delta Live Tables.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-02-05",
+        "identifier": "R-02-05",
+        "principle": "Gestionar calidad de datos",
+        "title": "Adoptar enfoque centrado en datos para machine learning",
+        "capabilities": "Databricks Platform",
+        "details": "Un principio guía que continúa en el corazón de la visión de IA para la Plataforma de Inteligencia de Datos Databricks es adoptar un enfoque centrado en datos para machine learning. Con la creciente prevalencia de IA generativa, esta perspectiva sigue siendo igualmente importante. Los componentes centrales de cualquier proyecto de ML pueden verse simplemente como pipelines de datos.\n\nPipelines de ingeniería de features, entrenamiento, inferencia y monitoreo son pipelines de datos. Deben ser tan robustos como otros procesos de ingeniería de datos de producción. La calidad de los datos es crucial en cualquier aplicación de ML, así que los pipelines de datos de ML deben emplear enfoques sistemáticos para monitorear y mitigar problemas de calidad de datos. Evite herramientas que dificulten unir datos de predicciones de ML, monitoreo de modelos, etc., con el resto de sus datos. La manera más simple de lograr esto es desarrollar aplicaciones de ML en la misma plataforma usada para gestionar datos de producción.\n\neBook",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-03-01",
+        "identifier": "R-03-01",
+        "principle": "Diseñar para auto-escalado",
+        "title": "Habilitar auto-escalado para cargas ETL",
+        "capabilities": "Databricks Workflows",
+        "details": "El auto-scaling permite que los clusters redimensionen automáticamente basándose en las cargas de trabajo. El auto-scaling puede beneficiar muchos casos de uso y escenarios tanto desde una perspectiva de costo como de rendimiento. La documentación proporciona consideraciones para determinar si debe usar auto-scaling y cómo obtener el mayor beneficio.\n\nPara cargas de trabajo de streaming, Databricks recomienda usar Delta Live Tables con auto-scaling. Vea Use autoscaling to increase efficiency and reduce resource usage.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-03-02",
+        "identifier": "R-03-02",
+        "principle": "Diseñar para auto-escalado",
+        "title": "Usar auto-escalado para SQL Warehouses",
+        "capabilities": "Databricks SQL",
+        "details": "El parámetro de escalado de un SQL warehouse define el número mínimo y máximo de clusters sobre los cuales se distribuyen las consultas enviadas al warehouse. El valor predeterminado es un mínimo de uno y un máximo de un cluster.\n\nPara manejar más usuarios simultáneos para un warehouse dado, aumente el conteo de clusters. Para saber cómo Databricks agrega y elimina clusters de un warehouse, vea SQL warehouse sizing, scaling, and queuing behavior.\n\nAWS | Azure | GCP\n\nEl enhanced autoscaling de Databricks optimiza la utilización del cluster asignando automáticamente recursos del cluster basándose en el volumen de carga de trabajo, con impacto mínimo en la latencia de procesamiento de datos de sus pipelines.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-04-01",
+        "identifier": "R-04-01",
+        "principle": "Probar procedimientos de recuperación",
+        "title": "Recuperar de fallos de consultas Structured Streaming",
+        "capabilities": "Structured Streaming",
+        "details": "Structured Streaming proporciona tolerancia a fallos y consistencia de datos para consultas de streaming. Usando Databricks workflows, puede fácilmente configurar sus consultas Structured Streaming para reiniciar automáticamente en caso de fallo. La consulta reiniciada continúa donde la fallida se detuvo.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-04-02",
+        "identifier": "R-04-02",
+        "principle": "Probar procedimientos de recuperación",
+        "title": "Recuperar trabajos ETL usando capacidades de time travel",
+        "capabilities": "Delta Lake - Delta Time Travel",
+        "details": "A pesar de pruebas exhaustivas, un trabajo en producción puede fallar o producir algunos datos inesperados, incluso inválidos. A veces esto puede corregirse con un trabajo adicional después de entender el origen del problema y corregir el pipeline que llevó al problema en primer lugar. Sin embargo, frecuentemente esto no es directo, y el respectivo trabajo debe ser revertido. Usando Delta Time travel permite a los usuarios fácilmente revertir cambios a una versión o timestamp anterior, reparar el pipeline y reiniciar el pipeline corregido. Vea What is Delta Lake time travel?.\n\nUna manera conveniente de hacer esto es el comando RESTORE.\n\nAWS | Azure | GCP\nBlog",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-04-03",
+        "identifier": "R-04-03",
+        "principle": "Probar procedimientos de recuperación",
+        "title": "Usar framework de automatización de trabajos con recuperación integrada",
+        "capabilities": "Databricks Workflows",
+        "details": "Los Databricks Workflows están construidos para recuperación. Cuando una tarea en un trabajo multi-tarea falla (y, como tal, todas las tareas dependientes), Databricks Workflows proporcionan una vista de matriz de las ejecuciones, que permite examinar el problema que llevó al fallo. Vea View runs for a job. Sea un breve problema de red o un problema real en los datos, puede corregirlo e iniciar una ejecución de reparación en Databricks Workflows. Ejecuta solo las tareas fallidas y dependientes y mantiene los resultados exitosos de la ejecución anterior, ahorrando tiempo y dinero.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-04-04",
+        "identifier": "R-04-04",
+        "principle": "Probar procedimientos de recuperación",
+        "title": "Configurar patrón de recuperación de desastres",
+        "capabilities": null,
+        "details": "Databricks es frecuentemente una parte central de un ecosistema de datos general que incluye muchos servicios, incluyendo servicios de ingestión de datos upstream (batch/streaming), almacenamiento nativo en nube, herramientas y servicios downstream como aplicaciones de business intelligence y herramientas de orquestación. Algunos de sus casos de uso pueden ser particularmente sensibles a una interrupción regional en todo el servicio.\n\nLa recuperación de desastres involucra un conjunto de políticas, herramientas y procedimientos que permiten la recuperación o continuación de infraestructura y sistemas de tecnología vitales después de un desastre natural o inducido por el hombre. Un gran servicio de nube como Azure, AWS o GCP atiende muchos clientes y tiene protecciones integradas contra una sola falla. Sin embargo, fallos de región de nube pueden suceder, y el grado de interrupción y su impacto en su organización puede variar.\n\nPartes esenciales de una estrategia de recuperación de desastres son seleccionar una estrategia (activo/activo o activo/pasivo), seleccionar el conjunto de herramientas correcto y probar tanto el failover como la restauración.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-05-01",
+        "identifier": "R-05-01",
+        "principle": "Monitorear eventos de la plataforma",
+        "title": "Monitorear eventos de la plataforma de datos",
+        "capabilities": null,
+        "details": "Monitorear eventos de la plataforma de datos y ML",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "R-05-02",
+        "identifier": "R-05-02",
+        "principle": "Monitorear eventos de la plataforma",
+        "title": "Monitorear eventos de la nube",
+        "capabilities": null,
+        "details": "Monitorear eventos en su proveedor de nube",
         "type": "status",
         "status": "open"
       }
@@ -853,6 +1233,136 @@ const WAF_PILLARS_DATA = [
         "details": null,
         "type": "status",
         "status": "open"
+      },
+      {
+        "id": "PE-02-09",
+        "identifier": "PE-02-09",
+        "principle": "Diseñar cargas de trabajo para rendimiento",
+        "title": "Usar compactación",
+        "capabilities": "Optimize with ZOrder",
+        "details": "Delta Lake en Databricks puede mejorar la velocidad de lectura de consultas de una tabla. Una manera de mejorar esta velocidad es fusionar archivos pequeños en archivos más grandes. Activa la compactación ejecutando el comando OPTIMIZE. Vea Compact data files with optimize on Delta Lake.\n\nTambién puede compactar archivos pequeños automáticamente usando Auto Optimize. Vea Consider file size tuning.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-02-10",
+        "identifier": "PE-02-10",
+        "principle": "Diseñar cargas de trabajo para rendimiento",
+        "title": "Usar data skipping",
+        "capabilities": "Optimize with ZOrder",
+        "details": "Data skipping: Para lograr esto, la información de data skipping se recopila automáticamente cuando escribe datos en una tabla Delta (por defecto Delta Lake en Databricks recopila estadísticas en las primeras 32 columnas definidas en el esquema de su tabla). Delta Lake en Databricks aprovecha esta información (valores mínimos y máximos) en el momento de la consulta para proporcionar consultas más rápidas. Vea Data skipping for Delta Lake.\n\nPara mejores resultados, aplique Z-ordering, una técnica para co-localizar información relacionada en el mismo conjunto de archivos. Esta co-localidad es usada automáticamente en Databricks por los algoritmos de data-skipping de Delta Lake. Este comportamiento reduce dramáticamente la cantidad de datos que Delta Lake en Databricks necesita leer.\n\nDynamic file pruning: El dynamic file pruning (DFP) puede mejorar significativamente el rendimiento de muchas consultas en tablas Delta. DFP es especialmente eficiente para tablas no particionadas o joins en columnas no particionadas.\n\nDelta Lake liquid clustering reemplaza particionamiento de tabla y ZORDER para simplificar decisiones de layout de datos y optimizar el rendimiento de consultas.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-02-11",
+        "identifier": "PE-02-11",
+        "principle": "Diseñar cargas de trabajo para rendimiento",
+        "title": "Habilitar Predictive Optimization en su metastore",
+        "capabilities": "Predictive Optimization",
+        "details": "La predictive optimization elimina la necesidad de gestionar manualmente operaciones de mantenimiento para tablas Delta en Databricks.\n\nCon la predictive optimization habilitada, Databricks identifica automáticamente tablas que se beneficiarían de operaciones de mantenimiento y las ejecuta para el usuario. Las operaciones de mantenimiento solo se ejecutan cuando es necesario, eliminando tanto ejecuciones innecesarias para operaciones de mantenimiento como la carga asociada con el rastreo y solución de problemas de rendimiento.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-02-12",
+        "identifier": "PE-02-12",
+        "principle": "Diseñar cargas de trabajo para rendimiento",
+        "title": "Evitar over-partitioning",
+        "capabilities": "Partitioning",
+        "details": "En el pasado, particionamiento era la manera más común de saltar datos. Sin embargo, particionamiento es estático y se manifiesta como una jerarquía de sistema de archivos. No hay manera fácil de cambiar particiones si los patrones de acceso cambian con el tiempo. Frecuentemente, particionamiento lleva a over-partitioning - en otras palabras, demasiadas particiones con archivos muy pequeños, lo que resulta en mal rendimiento de consultas. Vea Partitions.\n\nMientras tanto, una elección mucho mejor que particionamiento es Z-ordering.\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-02-14",
+        "identifier": "PE-02-14",
+        "principle": "Diseñar cargas de trabajo para rendimiento",
+        "title": "Considerar ajuste de tamaño de archivo",
+        "capabilities": "Auto Optimize",
+        "details": "El término auto optimize a veces se usa para describir funcionalidad controlada por las configuraciones delta.autoCompact y delta.optimizeWrite. Este término se ha retirado a favor de describir cada configuración individualmente. Vea Configure Delta Lake to control data file size.\n\nAuto Optimize es particularmente útil en los siguientes escenarios:\nCasos de uso de streaming donde latencia en el orden de minutos es aceptable.\nMERGE INTO es el método preferido de escribir en Delta Lake.\nCREATE TABLE AS SELECT o INSERT INTO son operaciones comúnmente usadas.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-02-15",
+        "identifier": "PE-02-15",
+        "principle": "Diseñar cargas de trabajo para rendimiento",
+        "title": "Optimizar rendimiento de joins",
+        "capabilities": "Databricks Adaptive Query Execution",
+        "details": "Un range join ocurre cuando dos relaciones se unen usando una condición de punto en intervalo o superposición de intervalo. El soporte de optimización de range join en Databricks Runtime puede traer órdenes de magnitud de mejora en el rendimiento de consultas, pero requiere ajuste manual cuidadoso.\n\nAWS | Azure | GCP\n\nData skew es una condición en la que los datos de una tabla se distribuyen de manera desigual entre las particiones en el cluster. Data skew puede degradar severamente el rendimiento de consultas, especialmente aquellas con joins. Joins entre tablas grandes requieren shuffling de datos, y el skew puede llevar a un desequilibrio extremo de trabajo en el cluster.\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-02-16",
+        "identifier": "PE-02-16",
+        "principle": "Diseñar cargas de trabajo para rendimiento",
+        "title": "Ejecutar analyze table para recopilar estadísticas",
+        "capabilities": "Analyze Table",
+        "details": "Ejecute analyze table para recopilar estadísticas en toda la tabla para el plan de consulta.\nEsta información se persiste en el metastore y ayuda al optimizador de consultas:\n\nEligiendo el tipo de join adecuado.\nSeleccionando el lado de construcción correcto en un hash-join.\nCalibrando el orden de join en un join multi-way.\n\nDebe ejecutarse junto con OPTIMIZE diariamente y se recomienda en tablas < 5TB. La única advertencia es que analyze table no es incremental.\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-03-01",
+        "identifier": "PE-03-01",
+        "principle": "Ejecutar pruebas de rendimiento",
+        "title": "Probar con datos representativos de producción",
+        "capabilities": null,
+        "details": "Ejecute pruebas de rendimiento en datos de producción (solo lectura) o datos similares. Al usar datos similares, características como volumen, layout de archivo y data skews deben ser como datos de producción, ya que esto tiene un impacto significativo en el rendimiento.",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-03-02",
+        "identifier": "PE-03-02",
+        "principle": "Ejecutar pruebas de rendimiento",
+        "title": "Tomar en cuenta prewarming de recursos",
+        "capabilities": "Databricks Pools",
+        "details": "Tomar en cuenta prewarming de recursos\nLa primera consulta en un nuevo cluster es más lenta que todas las demás:\n\nEn general, los recursos del cluster necesitan inicializarse en múltiples capas.\n\nCuando caching es parte de la configuración, la primera ejecución asegura que los datos estén en el caché, lo que acelera trabajos subsiguientes.\n\nPrewarming de recursos - ejecutar consultas específicas para inicializar recursos y llenar cachés (por ejemplo, después de un reinicio de cluster) - puede aumentar significativamente el rendimiento de las primeras consultas. Entonces, para entender el comportamiento para los diferentes escenarios, pruebe el rendimiento de la primera ejecución (con y sin prewarming) y ejecuciones subsiguientes.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-03-03",
+        "identifier": "PE-03-03",
+        "principle": "Ejecutar pruebas de rendimiento",
+        "title": "Identificar cuellos de botella",
+        "capabilities": null,
+        "details": "Los cuellos de botella son áreas en su carga de trabajo que podrían empeorar el rendimiento general cuando la carga en producción aumenta. Identificar estos en el momento del diseño y probar contra cargas más altas ayudará a mantener las cargas de trabajo estables en producción.",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-04-01",
+        "identifier": "PE-04-01",
+        "principle": "Monitorear rendimiento",
+        "title": "Monitorear rendimiento de consultas",
+        "capabilities": null,
+        "details": "Query Profile: Utilice la característica de query profile para solucionar cuellos de botella de rendimiento durante la ejecución de una consulta. Proporciona visualización de cada tarea de consulta y métricas relacionadas como tiempo gastado, número de filas procesadas y consumo de memoria.\n\nSQL Warehouse Monitoring: Monitoree SQL warehouses visualizando estadísticas en vivo, gráficos de conteo de pico de consultas, gráficos de clusters en ejecución y tabla de historial de consultas.",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-04-02",
+        "identifier": "PE-04-02",
+        "principle": "Monitorear rendimiento",
+        "title": "Monitorear cargas de trabajo de streaming",
+        "capabilities": null,
+        "details": "Structured Streaming Monitoring: Para consultas de streaming, use el monitoreo integrado en la Spark UI bajo la pestaña Streaming o envíe métricas a servicios externos usando la interfaz Streaming Query Listener de Apache Spark.",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "PE-04-03",
+        "identifier": "PE-04-03",
+        "principle": "Monitorear rendimiento",
+        "title": "Monitorear rendimiento de trabajos",
+        "capabilities": null,
+        "details": "Visualice y gestione ejecuciones de trabajos a través de la UI de Databricks, que proporciona detalles sobre salida del trabajo, logs, métricas y el éxito o fallo de cada tarea en la ejecución del trabajo.",
+        "type": "status",
+        "status": "open"
       }
     ]
   },
@@ -904,10 +1414,50 @@ const WAF_PILLARS_DATA = [
       {
         "id": "CO-01-05",
         "identifier": "CO-01-05",
-        "principle": "Implementar gobernanza de costos",
-        "title": "Revisar y optimizar costos regularmente",
-        "capabilities": null,
-        "details": null,
+        "principle": "Elegir recursos óptimos",
+        "title": "Usar GPUs solo para las cargas de trabajo correctas",
+        "capabilities": "Databricks Cluster Configuration",
+        "details": "Las máquinas virtuales con GPUs pueden acelerar dramáticamente procesos computacionales para deep learning, pero tienen un precio significativamente más alto que las máquinas solo con CPU. Use instancias GPU solo para cargas de trabajo que tienen bibliotecas aceleradas por GPU.\nLa mayoría de las cargas de trabajo no usan bibliotecas aceleradas por GPU y no se benefician de instancias habilitadas para GPU. Los administradores de workspace pueden restringir máquinas y clusters GPU para evitar uso innecesario.\n\nAWS | Azure | GCP\nBlog",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "CO-01-06",
+        "identifier": "CO-01-06",
+        "principle": "Elegir recursos óptimos",
+        "title": "Usar Serverless para sus cargas de trabajo",
+        "capabilities": "Databricks Serverless",
+        "details": "Las cargas de trabajo de BI típicamente usan datos en ráfagas y generan múltiples consultas simultáneas. Por ejemplo, alguien usando una herramienta de BI podría actualizar un dashboard, escribir una consulta o simplemente analizar resultados de consultas sin interactuar más con la plataforma. Este ejemplo demuestra dos requisitos:\n\nTerminar clusters durante períodos ociosos para ahorrar costos.\nTener recursos de cómputo disponibles rápidamente (tanto para inicio como para scale-up) para satisfacer consultas de usuarios cuando solicitan datos nuevos o actualizados con la herramienta de BI.\n\nSQL warehouses serverless inician y escalan en segundos, así que tanto disponibilidad inmediata como terminación durante tiempos ociosos pueden lograrse. Esto resulta en una gran experiencia de usuario y ahorro general de costos.\nAdicionalmente, SQL warehouses serverless reducen más temprano que warehouses no-serverless, resultando en costos menores.\n\nAWS | Azure | GCP\n\nDatabricks Model Serving proporciona una interfaz unificada para desplegar, gobernar y consultar modelos de IA. Cada modelo que sirve está disponible como una API REST que puede integrar en su aplicación web o cliente.\n\nModel Serving proporciona un servicio de alta disponibilidad y baja latencia para despliegue de modelos. El servicio escala automáticamente para satisfacer cambios en la demanda, ahorrando costos de infraestructura mientras optimiza el rendimiento de latencia. Esta funcionalidad usa cómputo serverless.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "CO-01-07",
+        "identifier": "CO-01-07",
+        "principle": "Elegir recursos óptimos",
+        "title": "Usar el tipo de instancia correcto",
+        "capabilities": "Databricks Cluster Configuration",
+        "details": "Basándose en sus cargas de trabajo, también es importante elegir la familia de instancias correcta para obtener la mejor relación rendimiento/precio. Algunas reglas simples son:\nOptimizado para memoria para ML, cargas de trabajo con heavy shuffle & spill\nOptimizado para cómputo para cargas de trabajo de Structured Streaming, trabajos de mantenimiento (ej. Optimize & Vacuum)\nOptimizado para almacenamiento para cargas de trabajo que se benefician de caching, ej. análisis de datos ad-hoc e interactivo\nOptimizado para GPU para cargas de trabajo específicas de ML & DL\nPropósito general en ausencia de requisitos específicos",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "CO-01-08",
+        "identifier": "CO-01-08",
+        "principle": "Elegir recursos óptimos",
+        "title": "Elegir el tamaño de cluster más eficiente",
+        "capabilities": "Databricks Cluster Configuration",
+        "details": "Número de workers, tipo de instancia y tamaño son factores importantes para configuraciones de cómputo. Junto con esos, al dimensionar cómputo, considere los datos consumidos, complejidad computacional, particionamiento de datos y paralelismo requerido. Para cargas de trabajo ETL simples, enfóquese en configuraciones optimizadas para cómputo, mientras que memoria y almacenamiento son importantes para cargas de trabajo con heavy shuffle. Balancear el número de workers y el tamaño de la instancia es crucial, ya que ambos pueden afectar I/O de red. Por último, considere los beneficios de caching para cargas de trabajo que requieren relecturas frecuentes de los mismos datos, usando configuraciones optimizadas para almacenamiento con Delta Cache.\n\nAWS | Azure | GCP",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "CO-01-09",
+        "identifier": "CO-01-09",
+        "principle": "Elegir recursos óptimos",
+        "title": "Evaluar motores de consulta optimizados para rendimiento",
+        "capabilities": "Databricks Cluster Configuration",
+        "details": "Photon es un motor de consulta vectorizado nativo de Databricks de alto rendimiento que acelera sus cargas de trabajo SQL y llamadas de API DataFrame (para ingestión de datos, ETL, streaming, ciencia de datos y consultas interactivas). Photon es compatible con APIs de Apache Spark, así que comenzar es tan fácil como encenderlo – sin cambios de código y sin lock-in.\nLa aceleración observada puede llevar a ahorro de costos significativo, y trabajos que corren regularmente deben evaluarse para ver si no son solo más rápidos, sino también más baratos con Photon.",
         "type": "status",
         "status": "open"
       },
@@ -964,10 +1514,30 @@ const WAF_PILLARS_DATA = [
       {
         "id": "CO-03-03",
         "identifier": "CO-03-03",
-        "principle": "Optimizar costos de almacenamiento",
-        "title": "Usar compresión de datos",
-        "capabilities": null,
-        "details": null,
+        "principle": "Monitorear y controlar costos",
+        "title": "Implementar observabilidad para rastrear y cobrar costos",
+        "capabilities": "Databricks Cluster Configuration",
+        "details": "Al trabajar con ecosistemas técnicos complejos, entender proactivamente las incógnitas es clave para mantener la estabilidad de la plataforma y controlar costos. Observabilidad proporciona una manera de analizar y optimizar sistemas basándose en los datos que generan. Esto es diferente de monitoreo, que se enfoca en identificar nuevos patrones en lugar de rastrear problemas conocidos.\nDatabricks proporciona grandes capacidades de observabilidad usando System tables que son almacenes analíticos hospedados por Databricks de los datos operacionales de una cuenta de cliente encontrados en el catálogo de sistema. Proporcionan observabilidad histórica en toda la cuenta e incluyen información tabular amigable sobre telemetría de la plataforma.",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "CO-03-04",
+        "identifier": "CO-03-04",
+        "principle": "Monitorear y controlar costos",
+        "title": "Compartir reportes de costos regularmente",
+        "capabilities": "Unity Catalog - System Tables",
+        "details": "Cree reportes de costos cada mes para rastrear crecimiento y anomalías en consumo. Comparta estos reportes detallados por casos de uso o equipos con los equipos que poseen las respectivas cargas de trabajo usando etiquetado de cluster. Esto evita sorpresas y permite a los equipos adaptar proactivamente sus cargas de trabajo si los costos se vuelven muy altos.\n\nUse la consola de cuenta para obtener uso de alto nivel - AWS | Azure | GCP\n\nDatabricks recomienda usar tablas de sistema de Unity Catalog para generar reportes de uso detallados (por etiquetas de uso, etc) para reportes de costos mejorados.",
+        "type": "status",
+        "status": "open"
+      },
+      {
+        "id": "CO-03-05",
+        "identifier": "CO-03-05",
+        "principle": "Monitorear y controlar costos",
+        "title": "Monitorear y gestionar costos de egress de Delta Sharing",
+        "capabilities": "System Tables",
+        "details": "A diferencia de otras plataformas de compartición de datos, Delta Sharing no requiere replicación de datos. Este modelo tiene muchas ventajas, pero significa que su proveedor de nube puede cobrar tarifas de egress de datos cuando comparte datos entre nubes o regiones. Vea Monitor and manage Delta Sharing egress costs (for providers) para monitorear y gestionar cargos de egress.",
         "type": "status",
         "status": "open"
       },

@@ -170,6 +170,9 @@ const I18n = (function() {
         localStorage.setItem(STORAGE_KEY, lang);
         currentLanguage = lang;
 
+        // Set flag to indicate intentional language change (avoid beforeunload confirmation)
+        window._wafLanguageChanging = true;
+
         // Reload the page to apply all translations
         // This ensures WAF data is also reloaded with the correct language
         window.location.reload();
