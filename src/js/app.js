@@ -832,93 +832,134 @@ class WAFApp {
         // Get results filtered by categories
         const results = this.getAssessmentResults(assessment.id);
 
-        // Render results
+        // Render results with new dashboard structure
         resultsPage.innerHTML = `
-            <div class="results-container">
-                <div class="results-header">
-                    <h2>${this.t('results.title')} ${this.escapeHtml(results.assessmentName)}</h2>
-                    <div class="results-metadata">
-                        <span>${this.t('results.created')} ${new Date(results.createdAt).toLocaleDateString()}</span>
-                        <span>${this.t('results.updated')} ${new Date(results.updatedAt).toLocaleDateString()}</span>
-                    </div>
-                    ${results.categories.length > 0 ? `
-                        <div class="results-categories">
-                            <strong>${this.t('results.categories')}</strong>
-                            ${results.categories.map(cat => `<span class="category-tag">${cat}</span>`).join('')}
-                        </div>
-                    ` : ''}
-                </div>
-
-                <div class="results-overall">
-                    <h3>${this.t('results.overallProgress')}</h3>
-                    <div class="overall-content-grid">
-                        <div class="visualization-card radar-card">
-                            <h3>${this.t('results.scoreByPillar')}</h3>
-                            <canvas id="pillar-radar-chart"></canvas>
-                        </div>
-                        <div class="overall-stats">
-                            <div class="stat-card stat-card-score">
-                                <div class="stat-icon">🎯</div>
-                                <div class="stat-content">
-                                    <div class="stat-value">${results.overall.scorePercentage}%</div>
-                                    <div class="stat-label">${this.t('results.overallScore')}</div>
-                                    <div class="stat-sublabel">${results.overall.totalScore}/${results.overall.maxPossibleScore} ${this.t('results.points')}</div>
-                                </div>
-                            </div>
-                            <div class="stat-card stat-card-completion">
-                                <div class="stat-icon">✓</div>
-                                <div class="stat-content">
-                                    <div class="stat-value">${results.overall.completionPercentage}%</div>
-                                    <div class="stat-label">${this.t('results.completionRate')}</div>
-                                    <div class="stat-sublabel">${results.overall.answeredQuestions}/${results.overall.totalQuestions} ${this.t('results.questions')}</div>
-                                </div>
-                            </div>
-                            <div class="stat-card stat-card-progress">
-                                <div class="stat-icon">⚡</div>
-                                <div class="stat-content">
-                                    <div class="stat-value">${results.overall.statusBreakdown.inProgress}</div>
-                                    <div class="stat-label">${this.t('results.inProgressLabel')}</div>
-                                    <div class="stat-sublabel">${results.overall.statusBreakdown.completed} ${this.t('results.completedLabel')}</div>
-                                </div>
-                            </div>
-                            <div class="stat-card stat-card-pending">
-                                <div class="stat-icon">📋</div>
-                                <div class="stat-content">
-                                    <div class="stat-value">${results.overall.statusBreakdown.open}</div>
-                                    <div class="stat-label">${this.t('results.openItems')}</div>
-                                    <div class="stat-sublabel">${results.overall.statusBreakdown.ignore} ${this.t('results.ignored')}</div>
-                                </div>
+            <div class="dashboard-container">
+                <!-- Dashboard Header -->
+                <div class="dashboard-header">
+                    <div class="dashboard-header-content">
+                        <div class="dashboard-title-section">
+                            <h2 class="dashboard-title">${this.t('results.title')} ${this.escapeHtml(results.assessmentName)}</h2>
+                            <div class="dashboard-metadata">
+                                <span class="metadata-item">
+                                    <span class="metadata-icon">📅</span>
+                                    <span class="metadata-text">${this.t('results.created')} ${new Date(results.createdAt).toLocaleDateString()}</span>
+                                </span>
+                                <span class="metadata-item">
+                                    <span class="metadata-icon">🔄</span>
+                                    <span class="metadata-text">${this.t('results.updated')} ${new Date(results.updatedAt).toLocaleDateString()}</span>
+                                </span>
                             </div>
                         </div>
+                        ${results.categories.length > 0 ? `
+                            <div class="dashboard-categories">
+                                <span class="categories-label">${this.t('results.categories')}</span>
+                                <div class="categories-tags">
+                                    ${results.categories.map(cat => `<span class="category-tag">${cat}</span>`).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
 
-                <div class="results-pillars">
-                    <h3>${this.t('results.resultsByPillar')}</h3>
-                    <div class="results-pillars-grid">
+                <!-- Main Visualization Section with KPIs -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h3 class="section-title">${this.t('results.overallProgress')}</h3>
+                    </div>
+                    <div class="dashboard-overview-grid">
+                        <!-- Radar Chart -->
+                        <div class="dashboard-card dashboard-chart-card-compact">
+                            <div class="chart-header-compact">
+                                <h4 class="chart-title-compact">${this.t('results.scoreByPillar')}</h4>
+                            </div>
+                            <div class="chart-container-compact">
+                                <canvas id="pillar-radar-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- KPI Cards -->
+                        <div class="dashboard-kpi-stack">
+                            <div class="dashboard-card kpi-card kpi-card-primary">
+                                <div class="kpi-icon">🎯</div>
+                                <div class="kpi-content">
+                                    <div class="kpi-value">${results.overall.scorePercentage}%</div>
+                                    <div class="kpi-label">${this.t('results.overallScore')}</div>
+                                    <div class="kpi-sublabel">${results.overall.totalScore}/${results.overall.maxPossibleScore} ${this.t('results.points')}</div>
+                                </div>
+                            </div>
+                            <div class="dashboard-card kpi-card kpi-card-success">
+                                <div class="kpi-icon">✓</div>
+                                <div class="kpi-content">
+                                    <div class="kpi-value">${results.overall.completionPercentage}%</div>
+                                    <div class="kpi-label">${this.t('results.completionRate')}</div>
+                                    <div class="kpi-sublabel">${results.overall.answeredQuestions}/${results.overall.totalQuestions} ${this.t('results.questions')}</div>
+                                </div>
+                            </div>
+                            <div class="dashboard-card kpi-card kpi-card-warning">
+                                <div class="kpi-icon">⚡</div>
+                                <div class="kpi-content">
+                                    <div class="kpi-value">${results.overall.statusBreakdown.inProgress}</div>
+                                    <div class="kpi-label">${this.t('results.inProgressLabel')}</div>
+                                    <div class="kpi-sublabel">${results.overall.statusBreakdown.completed} ${this.t('results.completedLabel')}</div>
+                                </div>
+                            </div>
+                            <div class="dashboard-card kpi-card kpi-card-info">
+                                <div class="kpi-icon">📋</div>
+                                <div class="kpi-content">
+                                    <div class="kpi-value">${results.overall.statusBreakdown.open}</div>
+                                    <div class="kpi-label">${this.t('results.openItems')}</div>
+                                    <div class="kpi-sublabel">${results.overall.statusBreakdown.ignore} ${this.t('results.ignored')}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pillars Detail Section -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h3 class="section-title">${this.t('results.resultsByPillar')}</h3>
+                    </div>
+                    <div class="dashboard-pillars-grid">
                         ${results.pillars.map((pillar, index) => `
-                            <div class="pillar-result-card">
-                                <div class="pillar-result-main">
-                                    <div class="pillar-gauge-container">
+                            <div class="dashboard-card pillar-card">
+                                <div class="pillar-card-header">
+                                    <div class="pillar-number">${index + 1}</div>
+                                    <div class="pillar-header-content">
+                                        <h4 class="pillar-title">${this.escapeHtml(pillar.name)}</h4>
+                                        <div class="pillar-progress-text">
+                                            ${pillar.answeredQuestions}/${pillar.totalQuestions} ${this.t('results.answered')} 
+                                            (${Math.round((pillar.answeredQuestions / pillar.totalQuestions) * 100)}%)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pillar-card-body">
+                                    <div class="pillar-gauge-section">
                                         <canvas id="pillar-gauge-${index}" class="pillar-gauge"></canvas>
                                     </div>
-                                    <div class="pillar-result-content">
-                                        <div class="pillar-result-header">
-                                            <h4>${this.escapeHtml(pillar.name)}</h4>
-                                            <div class="pillar-result-progress">
-                                                ${pillar.answeredQuestions} ${this.t('assessment.of')} ${pillar.totalQuestions} ${this.t('results.answered')}
-                                                (${Math.round((pillar.answeredQuestions / pillar.totalQuestions) * 100)}%)
-                                            </div>
+                                    <div class="pillar-details-section">
+                                        <div class="pillar-score-display">
+                                            <div class="score-percentage">${pillar.scorePercentage}%</div>
+                                            <div class="score-details">${pillar.score}/${pillar.maxScore} ${this.t('results.points')}</div>
                                         </div>
-                                        <div class="pillar-result-score">
-                                            <div class="pillar-score-percentage">${pillar.scorePercentage}%</div>
-                                            <div class="pillar-score-details">${this.t('results.score')} ${pillar.score}/${pillar.maxScore} ${this.t('results.points')}</div>
-                                        </div>
-                                        <div class="pillar-result-stats">
-                                            <span class="status-badge status-open">${this.t('status.open')}: ${pillar.open}</span>
-                                            <span class="status-badge status-in-progress">${this.t('status.inProgress')}: ${pillar.inProgress}</span>
-                                            <span class="status-badge status-completed">${this.t('status.completed')}: ${pillar.completed}</span>
-                                            <span class="status-badge status-ignore">${this.t('status.ignore')}: ${pillar.ignore}</span>
+                                        <div class="pillar-status-badges">
+                                            <span class="status-badge status-open">
+                                                <span class="badge-label">${this.t('status.open')}</span>
+                                                <span class="badge-value">${pillar.open}</span>
+                                            </span>
+                                            <span class="status-badge status-in-progress">
+                                                <span class="badge-label">${this.t('status.inProgress')}</span>
+                                                <span class="badge-value">${pillar.inProgress}</span>
+                                            </span>
+                                            <span class="status-badge status-completed">
+                                                <span class="badge-label">${this.t('status.completed')}</span>
+                                                <span class="badge-value">${pillar.completed}</span>
+                                            </span>
+                                            <span class="status-badge status-ignore">
+                                                <span class="badge-label">${this.t('status.ignore')}</span>
+                                                <span class="badge-value">${pillar.ignore}</span>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -927,13 +968,16 @@ class WAFApp {
                     </div>
                 </div>
 
-                <div class="results-actions">
-                    <button class="btn btn-secondary" onclick="wafApp.exportAssessment('${assessment.id}')">
-                        ${this.t('results.exportData')}
-                    </button>
-                    <button class="btn btn-primary" onclick="wafApp.navigateToPage('assessment')">
-                        ${this.t('results.continueAssessment')}
-                    </button>
+                <!-- Actions Section -->
+                <div class="dashboard-section">
+                    <div class="dashboard-actions">
+                        <button class="btn btn-secondary" onclick="wafApp.exportAssessment('${assessment.id}')">
+                            ${this.t('results.exportData')}
+                        </button>
+                        <button class="btn btn-primary" onclick="wafApp.navigateToPage('assessment')">
+                            ${this.t('results.continueAssessment')}
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
