@@ -138,6 +138,8 @@
     "descriptionPlaceholder": "Adicionar notas...",
     "categoriesToAssess": "Categorias a Avaliar",
     "selectAtLeastOne": "Selecione pelo menos uma categoria",
+    "generateDemoData": "Gerar dados para demonstração",
+    "generateDemoDataHelp": "Preenche automaticamente as respostas com dados aleatórios para fins de demonstração",
     "createAssessment": "Criar Avaliação",
     "saveChanges": "Salvar Alterações",
     "importTitle": "Importar Avaliação",

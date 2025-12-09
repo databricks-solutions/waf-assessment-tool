@@ -1368,6 +1368,18 @@ class WAFApp {
                             </div>
                             <small>${this.t('modal.selectAtLeastOne')}</small>
                         </div>
+                        <div class="form-group">
+                            <label class="category-checkbox" style="display: flex; align-items: center; cursor: pointer;">
+                                <input
+                                    type="checkbox"
+                                    name="generateDemoData"
+                                    id="generate-demo-data"
+                                    style="margin-right: 8px;"
+                                >
+                                <span>${this.t('modal.generateDemoData')}</span>
+                            </label>
+                            <small style="margin-left: 24px;">${this.t('modal.generateDemoDataHelp')}</small>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onclick="wafApp.closeModal('create-assessment-modal')">
                                 ${this.t('ui.cancel')}
@@ -1389,6 +1401,71 @@ class WAFApp {
     }
 
     /**
+     * Generate random demo data for assessment
+     * @param {Object} assessment - Assessment object to populate with demo data
+     * @param {Array} categories - Selected categories
+     */
+    generateDemoData(assessment, categories) {
+        // Get filtered pillars based on selected categories
+        const filteredPillars = this.getFilteredPillars(categories);
+        
+        console.log('Generating demo data for assessment:', assessment.name);
+        console.log('Total questions to generate:', filteredPillars.reduce((sum, p) => sum + p.questions.length, 0));
+        
+        // Generate random probabilities within specified ranges
+        // Open: 5% to 20%
+        // In Progress: 15% to 30%
+        // Completed: 60% to 80%
+        // Ignored: 0% to 5%
+        const openProb = 5 + Math.random() * (20 - 5);
+        const inProgressProb = 15 + Math.random() * (30 - 15);
+        const completedProb = 60 + Math.random() * (80 - 60);
+        const ignoredProb = 0 + Math.random() * (5 - 0);
+        
+        // Normalize probabilities to ensure they add up to 100%
+        const total = openProb + inProgressProb + completedProb + ignoredProb;
+        const openNormalized = (openProb / total) * 100;
+        const inProgressNormalized = (inProgressProb / total) * 100;
+        const completedNormalized = (completedProb / total) * 100;
+        const ignoredNormalized = (ignoredProb / total) * 100;
+        
+        console.log('Demo data probabilities (normalized):');
+        console.log(`  Open: ${openNormalized.toFixed(1)}%`);
+        console.log(`  In Progress: ${inProgressNormalized.toFixed(1)}%`);
+        console.log(`  Completed: ${completedNormalized.toFixed(1)}%`);
+        console.log(`  Ignored: ${ignoredNormalized.toFixed(1)}%`);
+        
+        // Function to get random status based on probabilities
+        const getRandomStatus = () => {
+            const rand = Math.random() * 100;
+            
+            if (rand < openNormalized) {
+                return 'open';
+            } else if (rand < openNormalized + inProgressNormalized) {
+                return 'in-progress';
+            } else if (rand < openNormalized + inProgressNormalized + completedNormalized) {
+                return 'completed';
+            } else {
+                return 'ignore';
+            }
+        };
+        
+        // Generate responses for all questions in filtered pillars
+        filteredPillars.forEach(pillar => {
+            if (!assessment.data.pillars[pillar.id]) {
+                assessment.data.pillars[pillar.id] = {};
+            }
+            
+            pillar.questions.forEach(question => {
+                const status = getRandomStatus();
+                assessment.data.pillars[pillar.id][question.id] = status;
+            });
+        });
+        
+        console.log('Demo data generation complete');
+    }
+
+    /**
      * Handle create assessment form submission
      * @param {Event} event - Form submit event
      */
@@ -1398,6 +1475,7 @@ class WAFApp {
         const form = event.target;
         const name = form.name.value.trim();
         const description = form.description.value.trim();
+        const generateDemo = form.generateDemoData?.checked || false;
 
         // Get selected categories
         const categoryCheckboxes = form.querySelectorAll('input[name="category"]:checked');
@@ -1431,6 +1509,12 @@ class WAFApp {
             modified: false
         };
 
+        // Generate demo data if requested
+        if (generateDemo) {
+            this.generateDemoData(newAssessment, categories);
+            console.log('Demo data generated for assessment:', name);
+        }
+
         this.assessments[assessmentId] = newAssessment;
         this.currentAssessmentId = assessmentId;
         this.saveData();
@@ -1439,7 +1523,7 @@ class WAFApp {
         this.closeModal('create-assessment-modal');
         this.navigateToPage('assessment');
 
-        console.log('Created new assessment:', name, 'with categories:', categories);
+        console.log('Created new assessment:', name, 'with categories:', categories, '- Demo data:', generateDemo);
     }
 
     /**

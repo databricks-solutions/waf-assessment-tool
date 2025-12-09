@@ -138,6 +138,8 @@
     "descriptionPlaceholder": "Add notes...",
     "categoriesToAssess": "Categories to Assess",
     "selectAtLeastOne": "Select at least one category",
+    "generateDemoData": "Generate demo data",
+    "generateDemoDataHelp": "Automatically fills in answers with random data for demonstration purposes",
     "createAssessment": "Create Assessment",
     "saveChanges": "Save Changes",
     "importTitle": "Import Assessment",
