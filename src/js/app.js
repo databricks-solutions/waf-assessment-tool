@@ -808,6 +808,47 @@ class WAFApp {
     }
 
     /**
+     * Get results grouped by Principle within each Pillar
+     * @param {Object} results - Results object from getAssessmentResults
+     * @returns {Object} Grouped data by pillar and principle
+     */
+    getResultsByPrinciple(results) {
+        const groupedData = {};
+
+        results.pillars.forEach(pillar => {
+            groupedData[pillar.name] = {};
+
+            pillar.questions.forEach(question => {
+                const principle = question.principle;
+                
+                if (!groupedData[pillar.name][principle]) {
+                    groupedData[pillar.name][principle] = {
+                        score: 0,
+                        maxScore: 0,
+                        percentage: 0,
+                        questionCount: 0
+                    };
+                }
+
+                groupedData[pillar.name][principle].score += question.score;
+                groupedData[pillar.name][principle].maxScore += 3; // Max score per question
+                groupedData[pillar.name][principle].questionCount += 1;
+            });
+
+            // Calculate percentages
+            Object.keys(groupedData[pillar.name]).forEach(principle => {
+                const data = groupedData[pillar.name][principle];
+                data.percentage = data.maxScore > 0 
+                    ? Math.round((data.score / data.maxScore) * 100) 
+                    : 0;
+            });
+        });
+
+        return groupedData;
+    }
+
+
+    /**
      * Initialize results page
      */
     initializeResultsPage() {
@@ -968,6 +1009,8 @@ class WAFApp {
                     </div>
                 </div>
 
+                ${this.renderAnalysisByPillarSection(results)}
+
                 <!-- Actions Section -->
                 <div class="dashboard-section">
                     <div class="dashboard-actions">
@@ -990,6 +1033,126 @@ class WAFApp {
             this.renderPillarRadarChart(results.pillars);
             this.renderPillarGauges(results.pillars);
         }, 100);
+    }
+
+    /**
+     * Render the Analysis by Pillar section with grouped data
+     * @param {Object} results - Results object from getAssessmentResults
+     * @returns {string} HTML string for the analysis section
+     */
+    renderAnalysisByPillarSection(results) {
+        const byPrinciple = this.getResultsByPrinciple(results);
+
+        let html = `
+            <!-- Analysis by Pillar Section -->
+            <div class="dashboard-section analysis-by-pillar-section">
+                <div class="section-header">
+                    <h3 class="section-title">${this.t('results.analysisByPillar')}</h3>
+                    <p class="section-subtitle">${this.t('results.byPrinciple')}</p>
+                </div>
+                <div class="analysis-single-column">
+        `;
+
+        // Iterate through each pillar
+        Object.keys(byPrinciple).forEach((pillarName, pillarIndex) => {
+            const items = byPrinciple[pillarName];
+            
+            // Calculate totals for this pillar
+            let totalScore = 0;
+            let totalMaxScore = 0;
+            let itemCount = 0;
+            
+            Object.values(items).forEach(item => {
+                totalScore += item.score;
+                totalMaxScore += item.maxScore;
+                itemCount++;
+            });
+            
+            const pillarPercentage = totalMaxScore > 0 
+                ? Math.round((totalScore / totalMaxScore) * 100) 
+                : 0;
+            
+            // Sort items by percentage (descending)
+            const sortedItems = Object.entries(items).sort((a, b) => b[1].percentage - a[1].percentage);
+
+            html += `
+                <div class="pillar-analysis-card" data-accordion="principle-pillar-${pillarIndex}">
+                    <div class="pillar-analysis-header" onclick="wafApp.toggleAnalysisAccordion('principle', ${pillarIndex})">
+                        <div class="pillar-header-left">
+                            <div class="pillar-number">${pillarIndex + 1}</div>
+                            <div class="pillar-header-content">
+                                <h5 class="pillar-analysis-name">${this.escapeHtml(pillarName)}</h5>
+                                <div class="pillar-summary">
+                                    <span class="pillar-summary-score">${pillarPercentage}%</span>
+                                    <span class="pillar-summary-details">${totalScore}/${totalMaxScore} ${this.t('results.points')}</span>
+                                    <span class="pillar-summary-count">${itemCount} ${itemCount === 1 ? 'item' : 'items'}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-toggle">
+                            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="pillar-analysis-items collapsed">
+            `;
+
+            sortedItems.forEach(([itemName, data]) => {
+                html += `
+                    <div class="principle-item">
+                        <div class="item-header">
+                            <span class="item-name">${this.escapeHtml(itemName)}</span>
+                            <span class="item-percentage">${data.percentage}%</span>
+                        </div>
+                        <div class="percentage-bar-container">
+                            <div class="percentage-bar-fill" style="width: ${data.percentage}%"></div>
+                        </div>
+                        <div class="item-meta">
+                            <span class="item-score">${data.score}/${data.maxScore} ${this.t('results.points')}</span>
+                            <span class="item-count">${data.questionCount} ${data.questionCount === 1 ? this.t('results.question') : this.t('results.questions')}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `
+                </div>
+            </div>
+        `;
+
+        return html;
+    }
+
+    /**
+     * Toggle accordion state for analysis by pillar cards
+     * @param {string} columnType - Type of column (principle or best-practice)
+     * @param {number} pillarIndex - Index of the pillar to toggle
+     */
+    toggleAnalysisAccordion(columnType, pillarIndex) {
+        const card = document.querySelector(`[data-accordion="${columnType}-pillar-${pillarIndex}"]`);
+        if (!card) return;
+
+        const itemsContainer = card.querySelector('.pillar-analysis-items');
+        const header = card.querySelector('.pillar-analysis-header');
+        
+        if (itemsContainer.classList.contains('collapsed')) {
+            // Expand
+            itemsContainer.classList.remove('collapsed');
+            itemsContainer.classList.add('expanded');
+            header.classList.add('active');
+        } else {
+            // Collapse
+            itemsContainer.classList.remove('expanded');
+            itemsContainer.classList.add('collapsed');
+            header.classList.remove('active');
+        }
     }
 
     /**

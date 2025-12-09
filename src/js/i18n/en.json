@@ -111,6 +111,7 @@
     "points": "points",
     "completionRate": "Completion Rate",
     "questions": "questions",
+    "question": "question",
     "inProgressLabel": "In Progress",
     "completedLabel": "completed",
     "openItems": "Open Items",
@@ -119,7 +120,10 @@
     "answered": "answered",
     "score": "Score:",
     "exportData": "Export Assessment Data",
-    "continueAssessment": "Continue Assessment"
+    "continueAssessment": "Continue Assessment",
+    "analysisByPillar": "Analysis by Pillar",
+    "byPrinciple": "By Principle",
+    "byBestPractice": "By Best Practice"
   },
   "modal": {
     "assessmentManager": "Assessment Manager",

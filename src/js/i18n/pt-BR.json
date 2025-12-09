@@ -111,6 +111,7 @@
     "points": "pontos",
     "completionRate": "Taxa de Conclusão",
     "questions": "perguntas",
+    "question": "pergunta",
     "inProgressLabel": "Em Andamento",
     "completedLabel": "concluídos",
     "openItems": "Itens Abertos",
@@ -119,7 +120,10 @@
     "answered": "respondidas",
     "score": "Pontuação:",
     "exportData": "Exportar Dados da Avaliação",
-    "continueAssessment": "Continuar Avaliação"
+    "continueAssessment": "Continuar Avaliação",
+    "analysisByPillar": "Análise por Pilar",
+    "byPrinciple": "Por Princípio",
+    "byBestPractice": "Por Best Practice"
   },
   "modal": {
     "assessmentManager": "Gerenciador de Avaliações",
