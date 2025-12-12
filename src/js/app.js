@@ -15,6 +15,30 @@ class WAFApp {
     }
 
     /**
+     * Get maturity metadata from an overall score percentage (0-100).
+     * Quartiles:
+     *  - 0-24: basic
+     *  - 25-49: developing
+     *  - 50-74: proficient
+     *  - 75-100: optimized
+     * @param {number} percent
+     * @returns {{ percent: number, levelKey: 'basic'|'developing'|'proficient'|'optimized', levelLabel: string }}
+     */
+    getMaturityMeta(percent) {
+        const p = Number.isFinite(percent) ? Math.round(percent) : 0;
+        const clamped = Math.max(0, Math.min(100, p));
+
+        /** @type {'basic'|'developing'|'proficient'|'optimized'} */
+        let levelKey = 'basic';
+        if (clamped >= 75) levelKey = 'optimized';
+        else if (clamped >= 50) levelKey = 'proficient';
+        else if (clamped >= 25) levelKey = 'developing';
+
+        const levelLabel = this.t(`results.maturityLevels.${levelKey}`);
+        return { percent: clamped, levelKey, levelLabel };
+    }
+
+    /**
      * Get unique principles for a pillar (stable order as they appear in questions)
      * @param {Object} pillar - Pillar object with questions
      * @returns {string[]} List of unique principle names
@@ -1309,6 +1333,14 @@ class WAFApp {
 
         // Get results filtered by categories
         const results = this.getAssessmentResults(assessment.id);
+        const maturity = this.getMaturityMeta(results?.overall?.scorePercentage);
+        const maturityText = this.t('results.maturityText', {
+            percent: String(maturity.percent),
+            level: maturity.levelLabel
+        });
+        const scoreMedalAria = this.t('results.scoreMedalAria', {
+            percent: String(results?.overall?.scorePercentage ?? 0)
+        });
 
         // Render results with new dashboard structure
         resultsPage.innerHTML = `
@@ -1316,17 +1348,40 @@ class WAFApp {
                 <!-- Dashboard Header -->
                 <div class="dashboard-header">
                     <div class="dashboard-header-content">
-                        <div class="dashboard-title-section">
-                            <h2 class="dashboard-title">${this.t('results.title')} ${this.escapeHtml(results.assessmentName)}</h2>
-                            <div class="dashboard-metadata">
-                                <span class="metadata-item">
-                                    <span class="metadata-icon">📅</span>
-                                    <span class="metadata-text">${this.t('results.created')} ${new Date(results.createdAt).toLocaleDateString()}</span>
-                                </span>
-                                <span class="metadata-item">
-                                    <span class="metadata-icon">🔄</span>
-                                    <span class="metadata-text">${this.t('results.updated')} ${new Date(results.updatedAt).toLocaleDateString()}</span>
-                                </span>
+                        <div class="dashboard-header-top">
+                            <div class="dashboard-title-section">
+                                <h2 class="dashboard-title">${this.t('results.title')} ${this.escapeHtml(results.assessmentName)}</h2>
+                                <div class="dashboard-metadata">
+                                    <span class="metadata-item">
+                                        <span class="metadata-icon">📅</span>
+                                        <span class="metadata-text">${this.t('results.created')} ${new Date(results.createdAt).toLocaleDateString()}</span>
+                                    </span>
+                                    <span class="metadata-item">
+                                        <span class="metadata-icon">🔄</span>
+                                        <span class="metadata-text">${this.t('results.updated')} ${new Date(results.updatedAt).toLocaleDateString()}</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="dashboard-maturity">
+                                <div class="dashboard-score-medal" role="img" aria-label="${this.escapeHtml(scoreMedalAria)}">
+                                    <div class="score-medal-inner">
+                                        <div class="score-medal-value">${results.overall.scorePercentage}%</div>
+                                    </div>
+                                </div>
+                                <div class="kpi-maturity">
+                                    <div class="kpi-maturity-header">
+                                        <span class="maturity-badge maturity-${maturity.levelKey}">${this.escapeHtml(maturity.levelLabel)}</span>
+                                        <span class="maturity-text">${this.escapeHtml(maturityText)}</span>
+                                    </div>
+                                    <div class="maturity-scale" role="img" aria-label="${this.escapeHtml(maturityText)}">
+                                        <div class="maturity-scale-track"></div>
+                                        <div class="maturity-marker" style="left: ${maturity.percent}%"></div>
+                                    </div>
+                                    <div class="maturity-scale-labels" aria-hidden="true">
+                                        <span>0</span>
+                                        <span>100</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         ${results.categories.length > 0 ? `

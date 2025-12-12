@@ -122,6 +122,14 @@
     "overallProgress": "Progreso General",
     "scoreByPillar": "Puntuación por Pilar",
     "overallScore": "Puntuación General",
+    "scoreMedalAria": "Puntuación general: {percent}%",
+    "maturityText": "Madurez: {percent}% ({level})",
+    "maturityLevels": {
+      "basic": "Básico",
+      "developing": "En evolución",
+      "proficient": "Proficiente",
+      "optimized": "Optimizado"
+    },
     "points": "puntos",
     "completionRate": "Tasa de Completitud",
     "questions": "preguntas",
