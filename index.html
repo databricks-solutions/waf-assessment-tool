@@ -17,7 +17,7 @@
     <link rel="apple-touch-icon" href="src/assets/icons/icon-192x192.png">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="src/css/main.css?v=10">
+    <link rel="stylesheet" href="src/css/main.css?v=11">
 </head>
 <body>
     <!-- Header -->
@@ -308,28 +308,36 @@
     <script src="src/js/libs/gauge.min.js"></script>
 
     <!-- i18n Module -->
-    <script src="src/js/i18n.js?v=4"></script>
+    <script src="src/js/i18n.js?v=5"></script>
 
     <!-- WAF Data Loader - Loads appropriate language file -->
-    <script type="module">
+    <script>
         // Promise that resolves when WAF data is loaded
         window.wafDataLoaded = new Promise(async (resolve, reject) => {
             try {
                 const savedLang = localStorage.getItem('waf-language') || 'en';
-                const dataFile = savedLang === 'en' ? './src/js/waf-data.js' : `./src/js/waf-data-${savedLang}.js`;
+                // Only some languages have a dedicated localized WAF data file in-repo.
+                // Add language codes here when `src/data/waf-data-<lang>.json` exists.
+                const localizedDataLangs = new Set(['es', 'pt-BR', 'fr', 'it']);
+                const dataLang = (savedLang === 'en' || !localizedDataLangs.has(savedLang)) ? 'en' : savedLang;
+                const dataFile = dataLang === 'en' ? './src/data/waf-data.json' : `./src/data/waf-data-${dataLang}.json`;
                 
-                // Import the module dynamically
-                const module = await import(dataFile + '?v=5').catch(async (error) => {
+                // Fetch the JSON file
+                const response = await fetch(dataFile + '?v=9').catch(async (error) => {
                     // Fallback to English if language-specific file fails
                     if (savedLang !== 'en') {
                         console.warn(`Failed to load ${dataFile}, falling back to English`);
-                        return await import('./src/js/waf-data.js?v=5');
+                        return await fetch('./src/data/waf-data.json?v=9');
                     }
                     throw error;
                 });
                 
-                // Make WAF_PILLARS_DATA globally available
-                window.WAF_PILLARS_DATA = module.WAF_PILLARS_DATA;
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                // Parse JSON and make WAF_PILLARS_DATA globally available
+                window.WAF_PILLARS_DATA = await response.json();
                 resolve();
             } catch (error) {
                 reject(new Error('Failed to load WAF data: ' + error.message));
@@ -338,8 +346,8 @@
     </script>
 
     <!-- Application Scripts -->
-    <script src="src/js/category-mapping.js?v=3"></script>
-    <script src="src/js/app.js?v=7"></script>
-    <script src="src/js/pwa.js?v=3"></script>
+    <script src="src/js/category-mapping.js?v=4"></script>
+    <script src="src/js/app.js?v=8"></script>
+    <script src="src/js/pwa.js?v=4"></script>
 </body>
 </html>

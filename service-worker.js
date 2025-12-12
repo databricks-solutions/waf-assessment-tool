@@ -1,21 +1,15 @@
-const CACHE_NAME = 'databricks-waf-v0.2.4';
+const CACHE_NAME = 'databricks-waf-v0.2.5';
 const OFFLINE_URL = '/index.html';
 
-// Files to cache for offline use
-const FILES_TO_CACHE = [
+// Core files to cache for offline use (must exist).
+const CORE_FILES_TO_CACHE = [
     '/',
     '/index.html',
     '/src/css/main.css',
-    '/src/js/waf-data.js',
-    '/src/js/waf-data-es.js',
-    '/src/js/waf-data-pt-BR.js',
     '/src/js/category-mapping.js',
     '/src/js/app.js',
     '/src/js/pwa.js',
     '/src/js/i18n.js',
-    '/src/js/i18n/en.json',
-    '/src/js/i18n/es.json',
-    '/src/js/i18n/pt-BR.json',
     '/src/js/libs/chart.umd.js',
     '/src/js/libs/gauge.min.js',
     '/manifest.json',
@@ -32,6 +26,27 @@ const FILES_TO_CACHE = [
     '/src/assets/icons/icon-512x512.png'
 ];
 
+// Optional files (best-effort). These may be hosted externally or not exist in all deployments.
+const OPTIONAL_FILES_TO_CACHE = [
+    // i18n JSONs (can be provided externally; do not fail SW install if missing)
+    '/src/js/i18n/en.json',
+    '/src/js/i18n/es.json',
+    '/src/js/i18n/pt-BR.json',
+    '/src/js/i18n/fr.json',
+    '/src/js/i18n/it.json',
+
+    // Legacy/alternate WAF data bundles (not present in all builds)
+    '/src/js/waf-data.js',
+    '/src/js/waf-data-es.js',
+    '/src/js/waf-data-pt-BR.js',
+
+    // WAF data JSONs (helpful for offline, even if the app requests versioned URLs)
+    '/src/data/waf-data.json',
+    '/src/data/waf-data-es.json',
+    '/src/data/waf-data-pt-BR.json',
+    '/src/data/waf-data-fr.json'
+];
+
 // Install event - cache files
 self.addEventListener('install', (event) => {
     console.log('[ServiceWorker] Install');
@@ -39,7 +54,15 @@ self.addEventListener('install', (event) => {
         caches.open(CACHE_NAME)
             .then((cache) => {
                 console.log('[ServiceWorker] Caching app shell');
-                return cache.addAll(FILES_TO_CACHE);
+                return cache.addAll(CORE_FILES_TO_CACHE).then(async () => {
+                    const results = await Promise.allSettled(
+                        OPTIONAL_FILES_TO_CACHE.map((url) => cache.add(url))
+                    );
+                    const failed = results.filter((r) => r.status === 'rejected').length;
+                    if (failed) {
+                        console.warn(`[ServiceWorker] Optional precache failures: ${failed}/${OPTIONAL_FILES_TO_CACHE.length}`);
+                    }
+                });
             })
             .then(() => {
                 return self.skipWaiting();
@@ -69,6 +92,14 @@ self.addEventListener('fetch', (event) => {
 
     // Skip cross-origin requests
     if (event.request.url.startsWith(self.location.origin)) {
+        // Always fetch from network if URL has query string (versioned files)
+        const url = new URL(event.request.url);
+        if (url.search) {
+            console.log('[ServiceWorker] Bypassing cache for versioned file:', url.pathname);
+            event.respondWith(fetch(event.request));
+            return;
+        }
+
         event.respondWith(
             caches.match(event.request)
                 .then((response) => {

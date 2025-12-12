@@ -15,6 +15,25 @@ class WAFApp {
     }
 
     /**
+     * Get unique principles for a pillar (stable order as they appear in questions)
+     * @param {Object} pillar - Pillar object with questions
+     * @returns {string[]} List of unique principle names
+     */
+    getPillarPrinciples(pillar) {
+        const seen = new Set();
+        const principles = [];
+        if (!pillar?.questions) return principles;
+        pillar.questions.forEach(q => {
+            const p = q?.principle;
+            if (!p) return;
+            if (seen.has(p)) return;
+            seen.add(p);
+            principles.push(p);
+        });
+        return principles;
+    }
+
+    /**
      * Initialize pillars data structure
      * @returns {Array} Pillars configuration from real Excel data
      */
@@ -324,28 +343,127 @@ class WAFApp {
         if (!nav) return;
 
         const pillarsData = this.getCurrentPillarsData();
+        const currentPillar = pillarsData?.[this.currentPillarIndex];
+        const currentQuestion = currentPillar?.questions?.[this.currentQuestionIndex];
+        const activePrinciple = currentQuestion?.principle || null;
+        const assessment = this.getCurrentAssessment();
 
         nav.innerHTML = pillarsData.map((pillar, index) => {
             const progress = this.calculatePillarProgress(index);
             const isActive = index === this.currentPillarIndex;
             const isCompleted = progress === 100;
+            const isOpen = isActive; // single-open accordion: only the active pillar is expanded
+            const panelId = `pillar-accordion-panel-${index}`;
+            const headerId = `pillar-accordion-header-${index}`;
+            const principles = this.getPillarPrinciples(pillar);
+            const pillarData = assessment?.data?.pillars?.[pillar.id] || {};
 
             return `
-                <div class="pillar-nav-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}"
-                     onclick="wafApp.navigateToPillar(${index})">
-                    <div class="pillar-nav-header">
-                        <span class="pillar-nav-number">${index + 1}</span>
-                        <span class="pillar-nav-name">${pillar.name}</span>
-                    </div>
-                    <div class="pillar-nav-progress">
-                        <div class="pillar-nav-progress-bar">
-                            <div class="pillar-nav-progress-fill" style="width: ${progress}%"></div>
+                <div class="pillar-nav-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''} ${isOpen ? 'is-open' : ''}">
+                    <button
+                        type="button"
+                        class="pillar-accordion-header"
+                        id="${headerId}"
+                        aria-expanded="${isOpen ? 'true' : 'false'}"
+                        aria-controls="${panelId}"
+                        aria-current="${isActive ? 'page' : 'false'}"
+                        onclick="wafApp.navigateToPillar(${index})"
+                    >
+                        <div class="pillar-nav-header">
+                            <span class="pillar-nav-number">${index + 1}</span>
+                            <span class="pillar-nav-name">${this.escapeHtml(pillar.name)}</span>
                         </div>
-                        <span class="pillar-nav-progress-text">${progress}%</span>
+                        <div class="pillar-nav-progress">
+                            <div class="pillar-nav-progress-bar">
+                                <div class="pillar-nav-progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                            <span class="pillar-nav-progress-text">${progress}%</span>
+                        </div>
+                        <span class="pillar-accordion-chevron" aria-hidden="true">▾</span>
+                    </button>
+
+                    <div
+                        id="${panelId}"
+                        class="pillar-accordion-panel ${isOpen ? 'expanded' : 'collapsed'}"
+                        role="region"
+                        aria-labelledby="${headerId}"
+                        aria-hidden="${isOpen ? 'false' : 'true'}"
+                    >
+                        ${principles.map((principle) => {
+                            const isPrincipleActive = isActive && activePrinciple && activePrinciple === principle;
+                            const questionsForPrinciple = (pillar.questions || [])
+                                .map((q, qi) => ({ q, qi }))
+                                .filter(({ q }) => q?.principle === principle);
+                            return `
+                                <button
+                                    type="button"
+                                    class="principle-nav-item ${isPrincipleActive ? 'active' : ''}"
+                                    tabindex="${isOpen ? '0' : '-1'}"
+                                    onclick='wafApp.navigateToPrinciple(${index}, ${JSON.stringify(principle)})'
+                                >
+                                    <span class="principle-nav-name">${this.escapeHtml(principle)}</span>
+                                    <span class="principle-nav-tags" aria-label="Questions">
+                                        ${questionsForPrinciple.map(({ q, qi }) => {
+                                            const status = (pillarData?.[q.id] && pillarData[q.id] !== '') ? pillarData[q.id] : 'answer-later';
+                                            return `
+                                                <button
+                                                    type="button"
+                                                    class="question-tag status-${this.escapeHtml(status)}"
+                                                    tabindex="${isOpen ? '0' : '-1'}"
+                                                    onclick="event.stopPropagation(); wafApp.navigateToQuestion(${index}, ${qi})"
+                                                    aria-label="Go to question ${this.escapeHtml(q.identifier)}"
+                                                >
+                                                    ${this.escapeHtml(q.identifier)}
+                                                </button>
+                                            `;
+                                        }).join('')}
+                                    </span>
+                                </button>
+                            `;
+                        }).join('')}
                     </div>
                 </div>
             `;
         }).join('');
+    }
+
+    /**
+     * Navigate to the first question of a given principle inside a pillar
+     * @param {number} pillarIndex - Pillar index
+     * @param {string} principleName - Principle name
+     */
+    navigateToPrinciple(pillarIndex, principleName) {
+        const pillarsData = this.getCurrentPillarsData();
+        const pillar = pillarsData?.[pillarIndex];
+        if (!pillar) return;
+
+        this.currentPillarIndex = pillarIndex;
+
+        const idx = pillar.questions.findIndex(q => q?.principle === principleName);
+        this.currentQuestionIndex = idx >= 0 ? idx : 0;
+
+        this.renderPillarsSidebar();
+        this.renderCurrentQuestion();
+        window.scrollTo(0, 0);
+    }
+
+    /**
+     * Navigate to a specific question inside a pillar
+     * @param {number} pillarIndex - Pillar index
+     * @param {number} questionIndex - Question index within pillar
+     */
+    navigateToQuestion(pillarIndex, questionIndex) {
+        const pillarsData = this.getCurrentPillarsData();
+        const pillar = pillarsData?.[pillarIndex];
+        if (!pillar) return;
+        if (questionIndex < 0 || questionIndex >= (pillar.questions?.length || 0)) return;
+
+        this.currentPillarIndex = pillarIndex;
+        this.currentQuestionIndex = questionIndex;
+
+        this.renderPillarsSidebar();
+        this.renderCurrentQuestion();
+        window.scrollTo(0, 0);
     }
 
     /**
@@ -530,6 +648,7 @@ class WAFApp {
 
         // Get saved status (can be null/undefined if not answered)
         const savedStatus = assessment?.data?.pillars?.[currentPillar.id]?.[currentQuestion.id] || null;
+        const currentStatus = savedStatus || 'answer-later';
 
         // Build capabilities badge HTML
         const capabilitiesBadge = currentQuestion.capabilities ?
@@ -560,17 +679,67 @@ class WAFApp {
 
             <div class="question-status-row">
                 <div class="status-label">${this.t('assessment.status')}: <span class="status-required">*</span></div>
-                <select id="question-status"
-                        class="status-dropdown ${savedStatus ? 'status-' + savedStatus : 'status-unselected'}"
-                        onchange="wafApp.saveQuestionStatus('${currentPillar.id}', '${currentQuestion.id}', this.value)">
-                    <option value="answer-later" ${!savedStatus || savedStatus === 'answer-later' ? 'selected' : ''}>${this.t('status.answerLater')}</option>
-                    <option value="open" ${savedStatus === 'open' ? 'selected' : ''}>${this.t('status.open')}</option>
-                    <option value="in-progress" ${savedStatus === 'in-progress' ? 'selected' : ''}>${this.t('status.inProgress')}</option>
-                    <option value="completed" ${savedStatus === 'completed' ? 'selected' : ''}>${this.t('status.completed')}</option>
-                    <option value="ignore" ${savedStatus === 'ignore' ? 'selected' : ''}>${this.t('status.ignore')}</option>
-                </select>
+                <div id="question-status"
+                     class="status-button-group status-${currentStatus}"
+                     role="radiogroup"
+                     aria-label="${this.t('assessment.status')}">
+                    <button type="button"
+                            class="status-btn status-answer-later ${currentStatus === 'answer-later' ? 'is-selected' : ''}"
+                            role="radio"
+                            aria-checked="${currentStatus === 'answer-later' ? 'true' : 'false'}"
+                            data-status="answer-later"
+                            onclick="wafApp.saveQuestionStatus('${currentPillar.id}', '${currentQuestion.id}', 'answer-later')">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        <span class="status-text">${this.t('status.answerLater')}</span>
+                    </button>
+                    <button type="button"
+                            class="status-btn status-open ${currentStatus === 'open' ? 'is-selected' : ''}"
+                            role="radio"
+                            aria-checked="${currentStatus === 'open' ? 'true' : 'false'}"
+                            data-status="open"
+                            onclick="wafApp.saveQuestionStatus('${currentPillar.id}', '${currentQuestion.id}', 'open')">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        <span class="status-text">${this.t('status.open')}</span>
+                    </button>
+                    <button type="button"
+                            class="status-btn status-in-progress ${currentStatus === 'in-progress' ? 'is-selected' : ''}"
+                            role="radio"
+                            aria-checked="${currentStatus === 'in-progress' ? 'true' : 'false'}"
+                            data-status="in-progress"
+                            onclick="wafApp.saveQuestionStatus('${currentPillar.id}', '${currentQuestion.id}', 'in-progress')">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        <span class="status-text">${this.t('status.inProgress')}</span>
+                    </button>
+                    <button type="button"
+                            class="status-btn status-completed ${currentStatus === 'completed' ? 'is-selected' : ''}"
+                            role="radio"
+                            aria-checked="${currentStatus === 'completed' ? 'true' : 'false'}"
+                            data-status="completed"
+                            onclick="wafApp.saveQuestionStatus('${currentPillar.id}', '${currentQuestion.id}', 'completed')">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        <span class="status-text">${this.t('status.completed')}</span>
+                    </button>
+                    <button type="button"
+                            class="status-btn status-ignore ${currentStatus === 'ignore' ? 'is-selected' : ''}"
+                            role="radio"
+                            aria-checked="${currentStatus === 'ignore' ? 'true' : 'false'}"
+                            data-status="ignore"
+                            onclick="wafApp.saveQuestionStatus('${currentPillar.id}', '${currentQuestion.id}', 'ignore')">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        <span class="status-text">${this.t('status.ignore')}</span>
+                    </button>
+                </div>
             </div>
         `;
+
+        // Add Databricks Guidance section if available
+        if (currentQuestion.databricksGuidance) {
+            const guidanceHtml = this.renderDatabricksGuidance(
+                currentQuestion.databricksGuidance,
+                assessment?.cloudProvider || null
+            );
+            questionContent.innerHTML += guidanceHtml;
+        }
 
         // Update question counter
         const totalQuestions = pillarsData.reduce((sum, pillar) => sum + pillar.questions.length, 0);
@@ -601,6 +770,247 @@ class WAFApp {
         if (btnNext) {
             btnNext.innerHTML = isLastQuestion ? `<span>${this.t('assessment.finishAssessment')}</span>` : `<span>${this.t('assessment.next')}</span>`;
         }
+    }
+
+    /**
+     * Render Databricks Guidance section
+     * @param {Object} guidance - Guidance object
+     * @param {string|null} cloudProvider - Cloud provider (aws, azure, gcp, or null)
+     * @returns {string} HTML string
+     */
+    renderDatabricksGuidance(guidance, cloudProvider) {
+        const guidanceId = `guidance-${Date.now()}`;
+        
+        let html = `
+            <div class="databricks-guidance-container">
+                <button class="guidance-toggle-btn collapsed" 
+                        onclick="wafApp.toggleGuidance('${guidanceId}')"
+                        aria-expanded="false"
+                        aria-controls="${guidanceId}">
+                    <span class="btn-icon">💡</span>
+                    <span class="btn-text">${this.t('assessment.helpMeWithThis')}</span>
+                    <span class="toggle-arrow">▼</span>
+                </button>
+                
+                <div id="${guidanceId}" class="guidance-content collapsed" role="region" aria-hidden="true">
+                    ${this.renderGuidanceContext(guidance.context)}
+                    ${this.renderCloudSpecific(guidance.cloudSpecific, cloudProvider)}
+                    ${this.renderDecisionFramework(guidance.decisionFramework)}
+                    ${this.renderValidationChecklist(guidance.validationChecklist)}
+                    ${this.renderAdditionalResources(guidance.additionalResources)}
+                </div>
+            </div>
+        `;
+        
+        return html;
+    }
+
+    /**
+     * Toggle guidance section expand/collapse
+     * @param {string} guidanceId - Guidance section ID
+     */
+    toggleGuidance(guidanceId) {
+        const content = document.getElementById(guidanceId);
+        const button = content?.previousElementSibling;
+        
+        if (!content || !button) return;
+        
+        const isCollapsed = content.classList.contains('collapsed');
+        
+        if (isCollapsed) {
+            content.classList.remove('collapsed');
+            button.classList.remove('collapsed');
+            button.setAttribute('aria-expanded', 'true');
+            content.setAttribute('aria-hidden', 'false');
+        } else {
+            content.classList.add('collapsed');
+            button.classList.add('collapsed');
+            button.setAttribute('aria-expanded', 'false');
+            content.setAttribute('aria-hidden', 'true');
+        }
+    }
+
+    /**
+     * Render guidance context section
+     * @param {string} context - Context text
+     * @returns {string} HTML string
+     */
+    renderGuidanceContext(context) {
+        if (!context) return '';
+        return `
+            <div class="guidance-section guidance-context">
+                <h5 class="guidance-section-title">
+                    <span class="section-icon">📌</span>
+                    ${this.t('assessment.guidanceContext')}
+                </h5>
+                <p class="guidance-text">${this.escapeHtml(context)}</p>
+            </div>
+        `;
+    }
+
+    /**
+     * Render cloud-specific guidance section
+     * @param {Object} cloudSpecific - Cloud-specific info object
+     * @param {string|null} cloudProvider - Selected cloud provider
+     * @returns {string} HTML string
+     */
+    renderCloudSpecific(cloudSpecific, cloudProvider) {
+        if (!cloudSpecific) return '';
+        
+        // If cloudProvider defined and info available, show cloud-specific info
+        if (cloudProvider && cloudSpecific[cloudProvider]) {
+            const info = cloudSpecific[cloudProvider];
+            return `
+                <div class="guidance-section guidance-cloud">
+                    <h5 class="guidance-section-title">
+                        <span class="section-icon">☁️</span>
+                        ${this.t('assessment.guidanceCloudSpecific')} ${cloudProvider.toUpperCase()}
+                        <span class="cloud-badge">${this.t('assessment.definedInAssessment')}</span>
+                    </h5>
+                    <div class="cloud-info-card">
+                        <div class="cloud-concept">
+                            <strong>${this.t('assessment.concept')}:</strong> 
+                            ${this.escapeHtml(info.concept)}
+                        </div>
+                        ${info.keyPoints ? `
+                            <div class="cloud-keypoints">
+                                <strong>${this.t('assessment.keyPoints')}:</strong>
+                                <ul>
+                                    ${info.keyPoints.map(p => `<li>${this.escapeHtml(p)}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${info.documentation ? `
+                            <a href="${info.documentation}" target="_blank" class="btn-doc">
+                                📚 ${this.t('assessment.documentation')} →
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // If cloudProvider not defined, suggest setting it
+        if (!cloudProvider) {
+            return `
+                <div class="guidance-section guidance-suggestion">
+                    <p class="suggestion-text">
+                        <span class="info-icon">ℹ️</span>
+                        ${this.t('assessment.cloudProviderSuggestion')}
+                    </p>
+                    <button class="btn btn-sm btn-secondary" 
+                            onclick="wafApp.showEditAssessmentModal('${this.currentAssessmentId}')">
+                        ⚙️ ${this.t('assessment.editAssessment')}
+                    </button>
+                </div>
+            `;
+        }
+        
+        return '';
+    }
+
+    /**
+     * Render decision framework section
+     * @param {Object} framework - Decision framework object
+     * @returns {string} HTML string
+     */
+    renderDecisionFramework(framework) {
+        if (!framework) return '';
+        
+        return `
+            <div class="guidance-section guidance-decision">
+                <h5 class="guidance-section-title">
+                    <span class="section-icon">🎯</span>
+                    ${framework.title || this.t('assessment.decisionFramework')}
+                </h5>
+                ${framework.useCustomerManaged ? `
+                    <div class="decision-group decision-yes">
+                        <h6>${this.t('assessment.whenToUseCustomer')}</h6>
+                        <ul>
+                            ${framework.useCustomerManaged.map(item => 
+                                `<li><span class="check-icon">✅</span> ${this.escapeHtml(item)}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+                ${framework.useDefaultManaged ? `
+                    <div class="decision-group decision-neutral">
+                        <h6>${this.t('assessment.whenToUseDefault')}</h6>
+                        <ul>
+                            ${framework.useDefaultManaged.map(item => 
+                                `<li><span class="neutral-icon">⚪</span> ${this.escapeHtml(item)}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    /**
+     * Render validation checklist section
+     * @param {Array} checklist - Checklist array
+     * @returns {string} HTML string
+     */
+    renderValidationChecklist(checklist) {
+        if (!checklist || checklist.length === 0) return '';
+        
+        return `
+            <div class="guidance-section guidance-checklist">
+                <h5 class="guidance-section-title">
+                    <span class="section-icon">✅</span>
+                    ${this.t('assessment.validationChecklist')}
+                </h5>
+                <div class="checklist-accordion">
+                    ${checklist.map((category, index) => `
+                        <div class="checklist-category" data-category-index="${index}">
+                            <button class="checklist-category-toggle" 
+                                    onclick="this.parentElement.classList.toggle('expanded')"
+                                    type="button">
+                                <span class="toggle-icon">▶</span>
+                                <span class="category-name">📂 ${this.escapeHtml(category.category)}</span>
+                                <span class="question-count">(${category.questions.length})</span>
+                            </button>
+                            <div class="checklist-questions">
+                                ${category.questions.map(question => `
+                                    <div class="checklist-question">
+                                        <span class="question-icon">•</span>
+                                        <span class="question-text">${this.escapeHtml(question)}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Render additional resources section
+     * @param {Array} resources - Resources array
+     * @returns {string} HTML string
+     */
+    renderAdditionalResources(resources) {
+        if (!resources || resources.length === 0) return '';
+        
+        return `
+            <div class="guidance-section guidance-resources">
+                <h5 class="guidance-section-title">
+                    <span class="section-icon">📚</span>
+                    ${this.t('assessment.additionalResources')}
+                </h5>
+                <ul class="resources-list">
+                    ${resources.map(resource => `
+                        <li>
+                            <a href="${resource.url}" target="_blank" rel="noopener noreferrer">
+                                ${this.escapeHtml(resource.title)} →
+                            </a>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        `;
     }
 
     /**
@@ -648,16 +1058,32 @@ class WAFApp {
         assessment.modified = true;
         this.saveData();
 
-        // Update dropdown class for styling
-        const statusDropdown = document.getElementById('question-status');
-        if (statusDropdown) {
-            statusDropdown.className = `status-dropdown status-${status}`;
-        }
+        // Update status selector UI state (button group)
+        this.updateQuestionStatusUI(status);
 
         // Update progress
         this.renderPillarsSidebar();
 
         console.log(`Saved status for ${questionId}: ${status}`);
+    }
+
+    /**
+     * Sync the status button group UI with a given status
+     * @param {string} status - Status value (answer-later, open, in-progress, completed, ignore)
+     */
+    updateQuestionStatusUI(status) {
+        const statusGroup = document.getElementById('question-status');
+        if (!statusGroup) return;
+
+        statusGroup.className = `status-button-group status-${status}`;
+
+        const buttons = statusGroup.querySelectorAll('.status-btn');
+        buttons.forEach(btn => {
+            const btnStatus = btn.getAttribute('data-status');
+            const isSelected = btnStatus === status;
+            btn.classList.toggle('is-selected', isSelected);
+            btn.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+        });
     }
 
     /**
@@ -1576,6 +2002,16 @@ class WAFApp {
                             <small>${this.t('modal.selectAtLeastOne')}</small>
                         </div>
                         <div class="form-group">
+                            <label for="cloud-provider">${this.t('modal.cloudProvider')}</label>
+                            <select id="cloud-provider" name="cloudProvider" class="form-select">
+                                <option value="">${this.t('modal.cloudProviderNone')}</option>
+                                <option value="aws">Amazon Web Services (AWS)</option>
+                                <option value="azure">Microsoft Azure</option>
+                                <option value="gcp">Google Cloud Platform (GCP)</option>
+                            </select>
+                            <small class="form-hint">${this.t('modal.cloudProviderHint')}</small>
+                        </div>
+                        <div class="form-group">
                             <label class="category-checkbox" style="display: flex; align-items: center; cursor: pointer;">
                                 <input
                                     type="checkbox"
@@ -1706,6 +2142,7 @@ class WAFApp {
             name: name,
             description: description,
             categories: categories,
+            cloudProvider: form.cloudProvider?.value || null,  // NEW: cloud provider field (optional)
             createdAt: now,
             updatedAt: now,
             data: {
@@ -1801,6 +2238,16 @@ class WAFApp {
                             </div>
                             <small>${this.t('modal.selectAtLeastOne')}</small>
                         </div>
+                        <div class="form-group">
+                            <label for="edit-cloud-provider">${this.t('modal.cloudProvider')}</label>
+                            <select id="edit-cloud-provider" name="cloudProvider" class="form-select">
+                                <option value="" ${!assessment.cloudProvider ? 'selected' : ''}>${this.t('modal.cloudProviderNone')}</option>
+                                <option value="aws" ${assessment.cloudProvider === 'aws' ? 'selected' : ''}>Amazon Web Services (AWS)</option>
+                                <option value="azure" ${assessment.cloudProvider === 'azure' ? 'selected' : ''}>Microsoft Azure</option>
+                                <option value="gcp" ${assessment.cloudProvider === 'gcp' ? 'selected' : ''}>Google Cloud Platform (GCP)</option>
+                            </select>
+                            <small class="form-hint">${this.t('modal.cloudProviderHint')}</small>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onclick="wafApp.closeModal('edit-assessment-modal')">
                                 ${this.t('ui.cancel')}
@@ -1860,6 +2307,7 @@ class WAFApp {
         assessment.name = name;
         assessment.description = description;
         assessment.categories = categories;
+        assessment.cloudProvider = form.cloudProvider?.value || null;  // NEW: update cloud provider field (optional)
         assessment.updatedAt = new Date().toISOString();
         assessment.modified = true;
 

@@ -8,7 +8,11 @@ const I18n = (function() {
     const LANGUAGES = {
         'en': { name: 'English', flag: '🇺🇸', nativeName: 'English' },
         'es': { name: 'Spanish', flag: '🇪🇸', nativeName: 'Español' },
-        'pt-BR': { name: 'Portuguese (Brazil)', flag: '🇧🇷', nativeName: 'Português (Brasil)' }
+        'pt-BR': { name: 'Portuguese (Brazil)', flag: '🇧🇷', nativeName: 'Português (Brasil)' },
+        // Note: translations are loaded dynamically via fetch; you can host `fr.json` externally.
+        'fr': { name: 'French', flag: '🇫🇷', nativeName: 'Français' },
+        // Note: translations are loaded dynamically via fetch; you can host `it.json` externally.
+        'it': { name: 'Italian', flag: '🇮🇹', nativeName: 'Italiano' }
     };
 
     // Storage key for language preference
@@ -25,6 +29,14 @@ const I18n = (function() {
 
     // WAF Data cache per language
     let wafDataCache = {};
+
+    // Optional override to load translation JSONs from an external location (CDN, etc).
+    // Example: window.__WAF_I18N_BASE_PATH = 'https://cdn.example.com/waf/i18n'
+    const I18N_BASE_PATH = (typeof window !== 'undefined' && window.__WAF_I18N_BASE_PATH) ? window.__WAF_I18N_BASE_PATH : 'src/js/i18n';
+
+    // Only some languages have a dedicated, localized WAF data file in-repo.
+    // Add language codes here when `src/data/waf-data-<lang>.json` exists.
+    const WAF_DATA_LOCALIZED_LANGS = new Set(['es', 'pt-BR', 'fr', 'it']);
 
     /**
      * Initialize the i18n module
@@ -58,7 +70,7 @@ const I18n = (function() {
         }
 
         try {
-            const response = await fetch(`src/js/i18n/${lang}.json`);
+            const response = await fetch(`${I18N_BASE_PATH}/${lang}.json`);
             if (!response.ok) {
                 throw new Error(`Failed to load translations for ${lang}`);
             }
@@ -66,11 +78,21 @@ const I18n = (function() {
             return translations[lang];
         } catch (error) {
             console.error(`Error loading translations for ${lang}:`, error);
-            // Fallback to English if available
-            if (lang !== 'en' && translations['en']) {
-                return translations['en'];
+            // Fallback to English: try to load it if not already loaded
+            if (lang !== 'en') {
+                try {
+                    if (!translations['en']) {
+                        const enResponse = await fetch(`${I18N_BASE_PATH}/en.json`);
+                        if (enResponse.ok) {
+                            translations['en'] = await enResponse.json();
+                        }
+                    }
+                    return translations['en'] || {};
+                } catch (enError) {
+                    console.error('Error loading English fallback translations:', enError);
+                }
             }
-            return {};
+            return translations[lang] || {};
         }
     }
 
@@ -269,10 +291,10 @@ const I18n = (function() {
      * @returns {string} Path to WAF data file
      */
     function getWafDataPath() {
-        if (currentLanguage === 'en') {
-            return 'src/js/waf-data.js';
+        if (currentLanguage === 'en' || !WAF_DATA_LOCALIZED_LANGS.has(currentLanguage)) {
+            return 'src/data/waf-data.json';
         }
-        return `src/js/waf-data-${currentLanguage}.js`;
+        return `src/data/waf-data-${currentLanguage}.json`;
     }
 
     /**

@@ -88,7 +88,21 @@
     "finishAssessment": "Finalizar Evaluación",
     "questionCounter": "Pregunta {current} de {total}",
     "breadcrumbPillar": "Pilar",
-    "breadcrumbQuestion": "Pregunta"
+    "breadcrumbQuestion": "Pregunta",
+    "helpMeWithThis": "💡 Ayúdame con esto",
+    "guidanceContext": "Contexto",
+    "guidanceCloudSpecific": "Guía",
+    "definedInAssessment": "Definido en Evaluación",
+    "concept": "Concepto",
+    "keyPoints": "Puntos clave",
+    "documentation": "Documentación",
+    "cloudProviderSuggestion": "Configure el proveedor de la nube en la evaluación para recibir orientación específica para su entorno.",
+    "editAssessment": "Editar evaluación",
+    "decisionFramework": "Marco de decisión",
+    "whenToUseCustomer": "Cuándo utilizar la red administrada por el cliente",
+    "whenToUseDefault": "Cuándo usar la red predeterminada (administrada por Databricks)",
+    "validationChecklist": "Lista de verificación de validación",
+    "additionalResources": "Recursos adicionales"
   },
   "status": {
     "answerLater": "Responder después",
@@ -149,7 +163,10 @@
     "importTitle": "Importar Evaluación",
     "importInstructions": "Seleccione un archivo JSON de evaluación previamente exportado para importar.",
     "assessmentFile": "Archivo de Evaluación",
-    "importBtn": "Importar Evaluación"
+    "importBtn": "Importar Evaluación",
+    "cloudProvider": "Proveedor de nube (opcional)",
+    "cloudProviderNone": "No especificado / Multinube",
+    "cloudProviderHint": "Seleccione el proveedor de la nube para recibir orientación específica en sus preguntas"
   },
   "categories": {
     "etlDsTools": "Herramientas ETL y DS",
@@ -216,4 +233,3 @@
     "fileTooLarge": "El archivo es demasiado grande"
   }
 }
-

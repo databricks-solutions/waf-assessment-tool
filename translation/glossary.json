@@ -1,0 +1,46 @@
+{
+  "preserve": [
+    "Unity Catalog",
+    "Databricks",
+    "AWS",
+    "Azure",
+    "GCP",
+    "Delta Sharing",
+    "Delta Lake",
+    "Databricks IQ",
+    "Catalog Explorer",
+    "Unity Catalog Metastore",
+    "ML Models",
+    "Service Principal",
+    "Delta Lake UniForm",
+    "GDPR",
+    "CCPA",
+    "HIPAA",
+    "BCBS",
+    "SOX"
+  ],
+  "replacements": {
+    "en": {
+      "Unity Catalog": "Unity Catalog",
+      "Databricks": "Databricks",
+      "AWS": "AWS",
+      "Azure": "Azure",
+      "GCP": "GCP"
+    },
+    "pt-BR": {
+      "Unity Catalog": "Unity Catalog",
+      "Databricks": "Databricks",
+      "AWS": "AWS",
+      "Azure": "Azure",
+      "GCP": "GCP"
+    },
+    "es": {
+      "Unity Catalog": "Unity Catalog",
+      "Databricks": "Databricks",
+      "AWS": "AWS",
+      "Azure": "Azure",
+      "GCP": "GCP"
+    }
+  }
+}
+
