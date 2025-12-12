@@ -349,7 +349,10 @@ class GlossaryManager:
         for pattern in self._preserve_patterns:
             def _repl(m: re.Match) -> str:
                 nonlocal counter
-                token = f"__DBX_GLOSSARY_TERM_{counter}__"
+                # IMPORTANT:
+                # Use a placeholder that is very unlikely to be modified by machine translation.
+                # Avoid real words like "GLOSSARY" (we have seen translators localize it, breaking unprotect()).
+                token = f"__DBX{counter}__"
                 counter += 1
                 token_map[token] = m.group(0)
                 return token

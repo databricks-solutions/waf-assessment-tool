@@ -438,7 +438,7 @@ Organized layering system:
 
 ## Version History
 
-### v0.3.1 (Current)
+### v0.3.2 (Current)
 - Complete design system rewrite
 - Glassmorphism effects
 - Modern gradient backgrounds

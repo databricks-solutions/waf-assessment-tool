@@ -1,50 +1,60 @@
-const CACHE_NAME = 'databricks-waf-v0.3.1';
-const OFFLINE_URL = '/index.html';
+const CACHE_NAME = 'databricks-waf-v0.3.2';
+
+// Get base path from service worker location (supports deployment in subdirectories)
+const getBasePath = () => {
+    const swPath = self.location.pathname;
+    // Remove 'service-worker.js' from path to get base directory
+    const basePath = swPath.substring(0, swPath.lastIndexOf('/') + 1);
+    return basePath;
+};
+
+const BASE_PATH = getBasePath();
+const OFFLINE_URL = BASE_PATH + 'index.html';
 
 // Core files to cache for offline use (must exist).
 const CORE_FILES_TO_CACHE = [
-    '/',
-    '/index.html',
-    '/src/css/main.css',
-    '/src/js/category-mapping.js',
-    '/src/js/app.js',
-    '/src/js/pwa.js',
-    '/src/js/i18n.js',
-    '/src/js/libs/chart.umd.js',
-    '/src/js/libs/gauge.min.js',
-    '/manifest.json',
-    '/src/assets/images/waf-implementation-cycle.png',
-    '/src/assets/images/lakehouse-architecture-pillars.png',
-    '/src/assets/icons/logo-waf.png',
-    '/src/assets/icons/icon-72x72.png',
-    '/src/assets/icons/icon-96x96.png',
-    '/src/assets/icons/icon-128x128.png',
-    '/src/assets/icons/icon-144x144.png',
-    '/src/assets/icons/icon-152x152.png',
-    '/src/assets/icons/icon-192x192.png',
-    '/src/assets/icons/icon-384x384.png',
-    '/src/assets/icons/icon-512x512.png'
+    BASE_PATH, // Root/index
+    BASE_PATH + 'index.html',
+    BASE_PATH + 'src/css/main.css',
+    BASE_PATH + 'src/js/category-mapping.js',
+    BASE_PATH + 'src/js/app.js',
+    BASE_PATH + 'src/js/pwa.js',
+    BASE_PATH + 'src/js/i18n.js',
+    BASE_PATH + 'src/js/libs/chart.umd.js',
+    BASE_PATH + 'src/js/libs/gauge.min.js',
+    BASE_PATH + 'manifest.json',
+    BASE_PATH + 'src/assets/images/waf-implementation-cycle.png',
+    BASE_PATH + 'src/assets/images/lakehouse-architecture-pillars.png',
+    BASE_PATH + 'src/assets/icons/logo-waf.png',
+    BASE_PATH + 'src/assets/icons/icon-72x72.png',
+    BASE_PATH + 'src/assets/icons/icon-96x96.png',
+    BASE_PATH + 'src/assets/icons/icon-128x128.png',
+    BASE_PATH + 'src/assets/icons/icon-144x144.png',
+    BASE_PATH + 'src/assets/icons/icon-152x152.png',
+    BASE_PATH + 'src/assets/icons/icon-192x192.png',
+    BASE_PATH + 'src/assets/icons/icon-384x384.png',
+    BASE_PATH + 'src/assets/icons/icon-512x512.png'
 ];
 
 // Optional files (best-effort). These may be hosted externally or not exist in all deployments.
 const OPTIONAL_FILES_TO_CACHE = [
     // i18n JSONs (can be provided externally; do not fail SW install if missing)
-    '/src/js/i18n/en.json',
-    '/src/js/i18n/es.json',
-    '/src/js/i18n/pt-BR.json',
-    '/src/js/i18n/fr.json',
-    '/src/js/i18n/it.json',
+    BASE_PATH + 'src/js/i18n/en.json',
+    BASE_PATH + 'src/js/i18n/es.json',
+    BASE_PATH + 'src/js/i18n/pt-BR.json',
+    BASE_PATH + 'src/js/i18n/fr.json',
+    BASE_PATH + 'src/js/i18n/it.json',
 
     // Legacy/alternate WAF data bundles (not present in all builds)
-    '/src/js/waf-data.js',
-    '/src/js/waf-data-es.js',
-    '/src/js/waf-data-pt-BR.js',
+    BASE_PATH + 'src/js/waf-data.js',
+    BASE_PATH + 'src/js/waf-data-es.js',
+    BASE_PATH + 'src/js/waf-data-pt-BR.js',
 
     // WAF data JSONs (helpful for offline, even if the app requests versioned URLs)
-    '/src/data/waf-data.json',
-    '/src/data/waf-data-es.json',
-    '/src/data/waf-data-pt-BR.json',
-    '/src/data/waf-data-fr.json'
+    BASE_PATH + 'src/data/waf-data.json',
+    BASE_PATH + 'src/data/waf-data-es.json',
+    BASE_PATH + 'src/data/waf-data-pt-BR.json',
+    BASE_PATH + 'src/data/waf-data-fr.json'
 ];
 
 // Install event - cache files
@@ -92,6 +102,12 @@ self.addEventListener('fetch', (event) => {
 
     // Skip cross-origin requests
     if (event.request.url.startsWith(self.location.origin)) {
+        // Skip non-GET requests (HEAD, POST, etc.) - Cache API only supports GET
+        if (event.request.method !== 'GET') {
+            event.respondWith(fetch(event.request));
+            return;
+        }
+
         // Always fetch from network if URL has query string (versioned files)
         const url = new URL(event.request.url);
         if (url.search) {
@@ -120,6 +136,7 @@ self.addEventListener('fetch', (event) => {
                         // Clone the response
                         const responseToCache = response.clone();
 
+                        // Cache the response (we already verified it's a GET request above)
                         caches.open(CACHE_NAME)
                             .then((cache) => {
                                 cache.put(event.request, responseToCache);

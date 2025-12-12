@@ -2173,9 +2173,9 @@ a:focus-visible {
 }
 
 .question-tag.status-in-progress {
-    border-color: #F97316;
-    color: #EA580C;
-    background: linear-gradient(135deg, rgba(249, 115, 22, 0.08), rgba(255, 255, 255, 0.9));
+    border-color: #FFB84D;
+    color: #FF9500;
+    background: linear-gradient(135deg, rgba(255, 184, 77, 0.08), rgba(255, 255, 255, 0.9));
 }
 
 .question-tag.status-completed {
@@ -2622,7 +2622,7 @@ a:focus-visible {
 }
 
 .status-btn.status-in-progress {
-    color: #EA580C;
+    color: #FF9500;
 }
 
 .status-btn.status-completed {
@@ -2647,7 +2647,7 @@ a:focus-visible {
 }
 
 .status-btn.status-in-progress.is-selected {
-    background: linear-gradient(135deg, rgba(249, 115, 22, 0.07), rgba(255, 255, 255, 0.92));
+    background: linear-gradient(135deg, rgba(255, 184, 77, 0.07), rgba(255, 255, 255, 0.92));
 }
 
 .status-btn.status-completed.is-selected {
@@ -2668,7 +2668,7 @@ a:focus-visible {
 }
 
 .status-button-group.status-in-progress {
-    border-color: #F97316;
+    border-color: #FFB84D;
 }
 
 .status-button-group.status-completed {
@@ -2729,9 +2729,9 @@ a:focus-visible {
 }
 
 .status-dropdown.status-in-progress {
-    border-color: #F97316;
-    color: #EA580C;
-    background: linear-gradient(135deg, rgba(249, 115, 22, 0.05), rgba(255, 255, 255, 0.9));
+    border-color: #FFB84D;
+    color: #FF9500;
+    background: linear-gradient(135deg, rgba(255, 184, 77, 0.05), rgba(255, 255, 255, 0.9));
 }
 
 .status-dropdown.status-completed {
@@ -3385,9 +3385,9 @@ a:focus-visible {
 }
 
 .status-badge.status-in-progress {
-    color: #EA580C;
-    background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.05));
-    border-color: rgba(249, 115, 22, 0.25);
+    color: #FF9500;
+    background: linear-gradient(135deg, rgba(255, 184, 77, 0.1), rgba(255, 184, 77, 0.05));
+    border-color: rgba(255, 184, 77, 0.25);
 }
 
 .status-badge.status-completed {

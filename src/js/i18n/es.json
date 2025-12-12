@@ -24,7 +24,7 @@
     "results": "Resultados"
   },
   "header": {
-    "title": "Herramienta de Evaluación WAF",
+    "title": "WAF Herramienta de evaluación",
     "noAssessment": "Sin evaluación seleccionada",
     "assessmentLabel": "Evaluación:",
     "manageAssessments": "Administrar Evaluaciones"
@@ -34,11 +34,11 @@
     "version": "Versión {version}"
   },
   "home": {
-    "heroTitle": "Bienvenido a la herramienta de evaluación del marco bien diseñado Databricks",
+    "heroTitle": "Bienvenido a la herramienta de evaluación Databricks Well Architected Framework",
     "heroSubtitle": "Evalúe su arquitectura Databricks lakehouse comparándola con las mejores prácticas de la industria e identifique oportunidades de optimización en siete pilares críticos.",
     "startAssessment": "Iniciar Nueva Evaluación",
-    "aboutTitle": "Acerca del Marco de Arquitectura Bien Diseñada",
-    "aboutText": "El Databricks Well Architected Framework (WAF) proporciona una guía integral para implementar un lakehouse de datos en la plataforma de inteligencia de datos Databricks. Ayuda a las organizaciones a crear soluciones de inteligencia artificial y datos seguras, confiables, eficientes y rentables a través de evaluaciones estructuradas y ciclos de mejora continua.",
+    "aboutTitle": "Acerca del Well Architected Framework",
+    "aboutText": "El Databricks Well Architected Framework (WAF) proporciona una guía completa para implementar un lakehouse de datos en la plataforma de inteligencia de datos Databricks. Ayuda a las organizaciones a crear soluciones de inteligencia artificial y datos seguras, confiables, eficientes y rentables a través de evaluaciones estructuradas y ciclos de mejora continua.",
     "pillarsTitle": "Los Siete Pilares de la Excelencia",
     "pillarsDescription": "El marco se basa en siete pilares fundamentales que garantizan una cobertura integral de todos los aspectos críticos de su arquitectura lakehouse:",
     "pillar1Name": "Gobernanza de Datos",
@@ -56,13 +56,13 @@
     "pillar7Name": "Optimización de Costos",
     "pillar7Desc": "Maximice el valor empresarial mientras minimiza costos mediante el dimensionamiento correcto de recursos y optimización del uso.",
     "architectureTitle": "Lakehouse Arquitectura",
-    "architectureDescription": "Basada en estándares abiertos y gobernanza unificada, la arquitectura Databricks lakehouse combina lo mejor de los lagos y almacenes de datos:",
-    "architectureCaption": "La pila lakehouse que incluye Unity Catalog para una gobernanza unificada, Delta Lake UniForm para estándares abiertos y los siete pilares del marco bien diseñado.",
+    "architectureDescription": "Construida sobre estándares abiertos y gobernanza unificada, la arquitectura Databricks lakehouse combina lo mejor de los lagos y almacenes de datos:",
+    "architectureCaption": "La pila lakehouse que incluye Unity Catalog para una gobernanza unificada, Delta Lake UniForm para estándares abiertos y los siete pilares de Well Architected Framework.",
     "cycleTitle": "Ciclo de Mejora Continua",
-    "cycleDescription": "El WAF sigue un enfoque estructurado de mejora continua para garantizar que su arquitectura lakehouse evolucione con las mejores prácticas y las necesidades organizativas:",
+    "cycleDescription": "WAF sigue un enfoque estructurado de mejora continua para garantizar que su arquitectura lakehouse evolucione con las mejores prácticas y las necesidades organizativas:",
     "cycleCaption": "El ciclo de mejora continua: Evaluar → Priorizar → Remediar → Educar → Automatizar, Monitorear e Iterar",
     "resourcesTitle": "Documentación de la Plataforma",
-    "resourcesDescription": "Acceda a documentación completa de arquitectura lakehouse específica para su plataforma en la nube:",
+    "resourcesDescription": "Acceda a documentación completa de la arquitectura lakehouse específica para su plataforma en la nube:",
     "awsTitle": "AWS Documentación",
     "awsDesc": "Lakehouse Arquitectura en Amazon Web Services",
     "azureTitle": "Azure Documentación",
@@ -70,7 +70,7 @@
     "gcpTitle": "GCP Documentación",
     "gcpDesc": "Lakehouse Arquitectura en Google Cloud Platform",
     "ctaTitle": "¿Listo para Comenzar?",
-    "ctaText": "Comience su evaluación de Well Architected Framework y descubra información sobre optimize su Databricks lakehouse.",
+    "ctaText": "Comience su evaluación Well Architected Framework y descubra ideas para optimize su Databricks lakehouse.",
     "launchAssessment": "Iniciar Evaluación"
   },
   "assessment": {
@@ -100,7 +100,7 @@
     "editAssessment": "Editar evaluación",
     "decisionFramework": "Marco de decisión",
     "whenToUseCustomer": "Cuándo utilizar la red administrada por el cliente",
-    "whenToUseDefault": "Cuándo utilizar la red predeterminada (Databricks-administrada)",
+    "whenToUseDefault": "Cuándo utilizar la red predeterminada (administrada por Databricks)",
     "validationChecklist": "Lista de verificación de validación",
     "additionalResources": "Recursos adicionales"
   },
@@ -169,7 +169,7 @@
     "createAssessment": "Crear Evaluación",
     "saveChanges": "Guardar Cambios",
     "importTitle": "Importar Evaluación",
-    "importInstructions": "Seleccione un archivo JSON de evaluación previamente exportado para importar.",
+    "importInstructions": "Seleccione un archivo de evaluación JSON previamente exportado para importar.",
     "assessmentFile": "Archivo de Evaluación",
     "importBtn": "Importar Evaluación",
     "cloudProvider": "Proveedor de nube (opcional)",

@@ -117,7 +117,7 @@ For detailed architecture guidance specific to your cloud provider:
 
 ## Features
 
-### Current Features (v0.3.1)
+### Current Features (v0.3.2)
 
 - **Progressive Web App**: Install on any device and use offline
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
@@ -354,7 +354,7 @@ When you make changes to cached files:
 
 1. Update the `CACHE_NAME` version in `service-worker.js`:
    ```javascript
-   const CACHE_NAME = 'databricks-waf-v0.3.1';
+   const CACHE_NAME = 'databricks-waf-v0.3.2';
    ```
 
 2. Update the `FILES_TO_CACHE` array if you add new files:

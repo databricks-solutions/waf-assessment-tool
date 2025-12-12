@@ -24,21 +24,21 @@
     "results": "Risultati"
   },
   "header": {
-    "title": "Strumento di valutazione WAF",
+    "title": "WAF Strumento di valutazione",
     "noAssessment": "Nessuna valutazione selezionata",
     "assessmentLabel": "Valutazione:",
     "manageAssessments": "Gestisci valutazioni"
   },
   "footer": {
-    "copyright": "© {anno} __DBX_GLOSSARIO_TERM_0__. Tutti i diritti riservati.",
+    "copyright": "© {anno} Databricks. Tutti i diritti riservati.",
     "version": "Versione {version}"
   },
   "home": {
-    "heroTitle": "Benvenuto nello Databricks Strumento di valutazione del framework ben progettato",
-    "heroSubtitle": "Valuta la tua architettura Databricks lakehouse rispetto alle migliori pratiche del settore e identifica le opportunità di ottimizzazione in sette pilastri critici.",
+    "heroTitle": "Benvenuto nello strumento di valutazione Databricks Well Architected Framework",
+    "heroSubtitle": "Valuta la tua architettura Databricks lakehouse rispetto alle migliori pratiche del settore e identifica le opportunità di ottimizzazione in sette pilastri fondamentali.",
     "startAssessment": "Avvia una nuova valutazione",
-    "aboutTitle": "Informazioni sul Well-Architected Framework",
-    "aboutText": "Il Databricks Well Architected Framework (WAF) fornisce indicazioni complete per l'implementazione di un lakehouse dati sulla piattaforma Databricks Data Intelligence. Aiuta le organizzazioni a creare soluzioni di dati e intelligenza artificiale sicure, affidabili, efficienti ed economicamente vantaggiose attraverso valutazioni strutturate e cicli di miglioramento continuo.",
+    "aboutTitle": "Informazioni su Well Architected Framework",
+    "aboutText": "Databricks Well Architected Framework (WAF) fornisce indicazioni complete per l'implementazione di un lakehouse di dati sulla piattaforma di data intelligence Databricks. Aiuta le organizzazioni a creare soluzioni di dati e intelligenza artificiale sicure, affidabili, efficienti ed economicamente vantaggiose attraverso valutazioni strutturate e cicli di miglioramento continuo.",
     "pillarsTitle": "I sette pilastri dell’eccellenza",
     "pillarsDescription": "Il framework si basa su sette pilastri fondamentali che garantiscono una copertura completa di tutti gli aspetti critici della tua architettura lakehouse:",
     "pillar1Name": "Governance dei dati",
@@ -55,22 +55,22 @@
     "pillar6Desc": "Optimize utilizzo delle risorse e adattamento alle mutevoli richieste con un'efficiente elaborazione dei dati e ottimizzazione delle query.",
     "pillar7Name": "Ottimizzazione dei costi",
     "pillar7Desc": "Massimizza il valore di business minimizzando i costi tramite un corretto dimensionamento delle risorse e l’ottimizzazione dell’utilizzo.",
-    "architectureTitle": "__DBX_GLOSSARIO_TERM_0__ Architettura",
+    "architectureTitle": "Lakehouse Architettura",
     "architectureDescription": "Basata su standard aperti e governance unificata, l'architettura Databricks lakehouse combina il meglio dei data lake e dei data warehouse:",
-    "architectureCaption": "Lo stack lakehouse con Unity Catalog per la governance unificata, Delta Lake UniForm per gli standard aperti e i sette pilastri del Well Architected Framework",
+    "architectureCaption": "Lo stack lakehouse con Unity Catalog per la governance unificata, Delta Lake UniForm per standard aperti e i sette pilastri di Well Architected Framework",
     "cycleTitle": "Ciclo di miglioramento continuo",
-    "cycleDescription": "Il WAF segue un approccio strutturato al miglioramento continuo per garantire che la tua architettura lakehouse si evolva con le migliori pratiche e le esigenze organizzative:",
+    "cycleDescription": "WAF segue un approccio strutturato al miglioramento continuo per garantire che la tua architettura lakehouse si evolva con le migliori pratiche e le esigenze organizzative:",
     "cycleCaption": "Il ciclo di miglioramento continuo: Valuta → Dai priorità → Correggi → Forma → Automatizza, monitora e itera",
     "resourcesTitle": "Documentazione della piattaforma",
-    "resourcesDescription": "Accedi alla documentazione completa sull'architettura lakehouse specifica per la tua piattaforma cloud:",
-    "awsTitle": "__DBX_GLOSSARIO_TERM_0__ Documentazione",
-    "awsDesc": "__DBX_GLOSSARIO_TERM_0__ Architettura su Amazon Web Services",
-    "azureTitle": "__DBX_GLOSSARIO_TERM_0__ Documentazione",
+    "resourcesDescription": "Accedi alla documentazione completa dell'architettura lakehouse specifica per la tua piattaforma cloud:",
+    "awsTitle": "AWS Documentazione",
+    "awsDesc": "Lakehouse Architettura su Amazon Web Services",
+    "azureTitle": "Azure Documentazione",
     "azureDesc": "Lakehouse Architettura su Microsoft Azure",
-    "gcpTitle": "__DBX_GLOSSARIO_TERM_0__ Documentazione",
+    "gcpTitle": "GCP Documentazione",
     "gcpDesc": "Lakehouse Architettura su Google Cloud Platform",
     "ctaTitle": "Pronto a iniziare?",
-    "ctaText": "Inizia la valutazione del Well Architected Framework e scopri approfondimenti su optimize il tuo Databricks lakehouse.",
+    "ctaText": "Inizia la tua valutazione Well Architected Framework e scopri approfondimenti su optimize il tuo Databricks lakehouse.",
     "launchAssessment": "Avvia la valutazione"
   },
   "assessment": {
@@ -172,12 +172,12 @@
     "createAssessment": "Crea valutazione",
     "saveChanges": "Salva modifiche",
     "importTitle": "Importa valutazione",
-    "importInstructions": "Seleziona un file JSON di valutazione precedentemente esportato da importare.",
+    "importInstructions": "Seleziona un file di valutazione JSON precedentemente esportato da importare.",
     "assessmentFile": "File di valutazione",
     "importBtn": "Importa valutazione"
   },
   "categories": {
-    "etlDsTools": "__DBX_GLOSSARIO_TERM_0__ e strumenti DS",
+    "etlDsTools": "ETL e strumenti DS",
     "biTools": "Strumenti BI",
     "orchestration": "Orchestrazione",
     "ingestTransform": "Ingestione e trasformazione",
@@ -212,7 +212,7 @@
     },
     "performanceEfficiency": {
       "name": "Efficienza delle prestazioni",
-      "description": "__DBX_GLOSSARIO_TERM_0__ utilizzo delle risorse e adattamento alle mutevoli richieste."
+      "description": "Optimize utilizzo delle risorse e adattamento alle mutevoli richieste."
     },
     "costOptimization": {
       "name": "Ottimizzazione dei costi",

@@ -26,8 +26,36 @@ class PWAManager {
      */
     async registerServiceWorker() {
         try {
-            this.serviceWorkerRegistration = await navigator.serviceWorker.register('/service-worker.js', {
-                scope: '/'
+            // Use relative path for service worker to support deployment in subdirectories
+            const swUrl = './service-worker.js';
+            // Calculate base path from current location (supports subdirectory deployment)
+            const currentPath = window.location.pathname;
+            // Remove filename if present (e.g., index.html) to get directory
+            const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+            const scope = basePath;
+            
+            try {
+                const response = await fetch(swUrl, { method: 'HEAD', cache: 'no-cache' });
+                if (!response.ok) {
+                    console.warn('Service Worker file not found, skipping registration');
+                    return;
+                }
+            } catch (fetchError) {
+                // If HEAD fails, try GET as fallback
+                try {
+                    const response = await fetch(swUrl, { method: 'GET', cache: 'no-cache' });
+                    if (!response.ok) {
+                        console.warn('Service Worker file not found, skipping registration');
+                        return;
+                    }
+                } catch (getError) {
+                    console.warn('Service Worker file not accessible, skipping registration');
+                    return;
+                }
+            }
+
+            this.serviceWorkerRegistration = await navigator.serviceWorker.register(swUrl, {
+                scope: scope
             });
 
             console.log('Service Worker registered successfully:', this.serviceWorkerRegistration);
@@ -44,7 +72,19 @@ class PWAManager {
                 });
             });
         } catch (error) {
-            console.error('Service Worker registration failed:', error);
+            // Check if error is due to missing service worker file (404)
+            const errorMessage = error.message || error.toString();
+            const is404Error = errorMessage.includes('404') || 
+                              errorMessage.includes('bad HTTP response code') ||
+                              (error.name === 'TypeError' && errorMessage.includes('Failed to register'));
+            
+            if (is404Error) {
+                // Service worker file not found - this is expected in some deployment scenarios
+                console.warn('Service Worker file not found, continuing without offline support');
+            } else {
+                // Other registration errors should be logged
+                console.error('Service Worker registration failed:', error);
+            }
         }
     }
 
