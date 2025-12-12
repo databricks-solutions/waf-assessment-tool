@@ -140,7 +140,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Progress tracking within assessment
 - Answer validation
 
-### Planned for v0.3.0
+### Planned for v0.3.1
 - Results dashboard with pillar scores
 - Visual scoring (radar charts, progress bars)
 - Recommendations engine
