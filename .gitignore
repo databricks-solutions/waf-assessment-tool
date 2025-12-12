@@ -26,10 +26,13 @@ build/
 .env.development.local
 .env.test.local
 .env.production.local
+venv/
 
 # Cache
 .cache/
 *.cache
+__pycache__/
+**/__pycache__/
 
 # Temporary files
 tmp/
@@ -39,3 +42,5 @@ temp/
 # OS files
 Thumbs.db
 Desktop.ini
+
+translation/.translate.lock
