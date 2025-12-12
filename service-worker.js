@@ -1,4 +1,4 @@
-const CACHE_NAME = 'databricks-waf-v0.2.5';
+const CACHE_NAME = 'databricks-waf-v0.3.0';
 const OFFLINE_URL = '/index.html';
 
 // Core files to cache for offline use (must exist).

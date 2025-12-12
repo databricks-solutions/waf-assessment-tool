@@ -1,7 +1,7 @@
 {
   "name": "WAF Assessment Tool",
   "short_name": "WAF Tool",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "Databricks Well Architected Framework Assessment Tool",
   "start_url": "/",
   "display": "standalone",
