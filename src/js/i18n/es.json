@@ -30,17 +30,17 @@
     "manageAssessments": "Administrar Evaluaciones"
   },
   "footer": {
-    "copyright": "© {year} Databricks. Todos los derechos reservados.",
+    "copyright": "© {año} Databricks. Reservados todos los derechos.",
     "version": "Versión {version}"
   },
   "home": {
-    "heroTitle": "Bienvenido a la Herramienta de Evaluación del Marco de Arquitectura Bien Diseñada de Databricks",
-    "heroSubtitle": "Evalúe su arquitectura de lakehouse de Databricks según las mejores prácticas de la industria e identifique oportunidades de optimización en siete pilares críticos.",
+    "heroTitle": "Bienvenido a la herramienta de evaluación del marco bien diseñado Databricks",
+    "heroSubtitle": "Evalúe su arquitectura Databricks lakehouse comparándola con las mejores prácticas de la industria e identifique oportunidades de optimización en siete pilares críticos.",
     "startAssessment": "Iniciar Nueva Evaluación",
     "aboutTitle": "Acerca del Marco de Arquitectura Bien Diseñada",
-    "aboutText": "El Marco de Arquitectura Bien Diseñada (WAF) de Databricks proporciona una guía completa para implementar un data lakehouse en la Plataforma de Inteligencia de Datos de Databricks. Ayuda a las organizaciones a construir soluciones de datos e IA seguras, confiables, eficientes y rentables a través de evaluaciones estructuradas y ciclos de mejora continua.",
+    "aboutText": "El Databricks Well Architected Framework (WAF) proporciona una guía integral para implementar un lakehouse de datos en la plataforma de inteligencia de datos Databricks. Ayuda a las organizaciones a crear soluciones de inteligencia artificial y datos seguras, confiables, eficientes y rentables a través de evaluaciones estructuradas y ciclos de mejora continua.",
     "pillarsTitle": "Los Siete Pilares de la Excelencia",
-    "pillarsDescription": "El marco se construye sobre siete pilares fundamentales que garantizan una cobertura completa de todos los aspectos críticos de su arquitectura lakehouse:",
+    "pillarsDescription": "El marco se basa en siete pilares fundamentales que garantizan una cobertura integral de todos los aspectos críticos de su arquitectura lakehouse:",
     "pillar1Name": "Gobernanza de Datos",
     "pillar1Desc": "Asegure que los datos aporten valor y apoyen la estrategia empresarial mediante una gobernanza adecuada, catalogación y gestión de metadatos.",
     "pillar2Name": "Interoperabilidad y Usabilidad",
@@ -52,25 +52,25 @@
     "pillar5Name": "Confiabilidad",
     "pillar5Desc": "Recupérese de fallos y continúe funcionando a través de redundancia, estrategias de respaldo y recuperación ante desastres.",
     "pillar6Name": "Eficiencia de Rendimiento",
-    "pillar6Desc": "Optimice el uso de recursos y adáptese a demandas cambiantes con procesamiento de datos eficiente y optimización de consultas.",
+    "pillar6Desc": "Optimize uso de recursos y adaptación a las demandas cambiantes con procesamiento de datos eficiente y optimización de consultas.",
     "pillar7Name": "Optimización de Costos",
     "pillar7Desc": "Maximice el valor empresarial mientras minimiza costos mediante el dimensionamiento correcto de recursos y optimización del uso.",
-    "architectureTitle": "Arquitectura Lakehouse",
-    "architectureDescription": "Construida sobre estándares abiertos y gobernanza unificada, la arquitectura lakehouse de Databricks combina lo mejor de los lagos de datos y almacenes de datos:",
-    "architectureCaption": "La pila lakehouse con Unity Catalog para gobernanza unificada, Delta Lake UniForm para estándares abiertos, y los Siete Pilares del Marco de Arquitectura Bien Diseñada",
+    "architectureTitle": "Lakehouse Arquitectura",
+    "architectureDescription": "Basada en estándares abiertos y gobernanza unificada, la arquitectura Databricks lakehouse combina lo mejor de los lagos y almacenes de datos:",
+    "architectureCaption": "La pila lakehouse que incluye Unity Catalog para una gobernanza unificada, Delta Lake UniForm para estándares abiertos y los siete pilares del marco bien diseñado.",
     "cycleTitle": "Ciclo de Mejora Continua",
-    "cycleDescription": "El WAF sigue un enfoque estructurado de mejora continua para asegurar que su arquitectura lakehouse evolucione con las mejores prácticas y necesidades organizacionales:",
+    "cycleDescription": "El WAF sigue un enfoque estructurado de mejora continua para garantizar que su arquitectura lakehouse evolucione con las mejores prácticas y las necesidades organizativas:",
     "cycleCaption": "El ciclo de mejora continua: Evaluar → Priorizar → Remediar → Educar → Automatizar, Monitorear e Iterar",
     "resourcesTitle": "Documentación de la Plataforma",
     "resourcesDescription": "Acceda a documentación completa de arquitectura lakehouse específica para su plataforma en la nube:",
-    "awsTitle": "Documentación AWS",
-    "awsDesc": "Arquitectura Lakehouse en Amazon Web Services",
-    "azureTitle": "Documentación Azure",
-    "azureDesc": "Arquitectura Lakehouse en Microsoft Azure",
-    "gcpTitle": "Documentación GCP",
-    "gcpDesc": "Arquitectura Lakehouse en Google Cloud Platform",
+    "awsTitle": "AWS Documentación",
+    "awsDesc": "Lakehouse Arquitectura en Amazon Web Services",
+    "azureTitle": "Azure Documentación",
+    "azureDesc": "Lakehouse Arquitectura en Microsoft Azure",
+    "gcpTitle": "GCP Documentación",
+    "gcpDesc": "Lakehouse Arquitectura en Google Cloud Platform",
     "ctaTitle": "¿Listo para Comenzar?",
-    "ctaText": "Comience su evaluación del Marco de Arquitectura Bien Diseñada y descubra ideas para optimizar su lakehouse de Databricks.",
+    "ctaText": "Comience su evaluación de Well Architected Framework y descubra información sobre optimize su Databricks lakehouse.",
     "launchAssessment": "Iniciar Evaluación"
   },
   "assessment": {
@@ -100,7 +100,7 @@
     "editAssessment": "Editar evaluación",
     "decisionFramework": "Marco de decisión",
     "whenToUseCustomer": "Cuándo utilizar la red administrada por el cliente",
-    "whenToUseDefault": "Cuándo usar la red predeterminada (administrada por Databricks)",
+    "whenToUseDefault": "Cuándo utilizar la red predeterminada (Databricks-administrada)",
     "validationChecklist": "Lista de verificación de validación",
     "additionalResources": "Recursos adicionales"
   },
@@ -169,7 +169,7 @@
     "cloudProviderHint": "Seleccione el proveedor de la nube para recibir orientación específica en sus preguntas"
   },
   "categories": {
-    "etlDsTools": "Herramientas ETL y DS",
+    "etlDsTools": "ETL y herramientas DS",
     "biTools": "Herramientas BI",
     "orchestration": "Orquestación",
     "ingestTransform": "Ingestión y Transformación",
@@ -204,7 +204,7 @@
     },
     "performanceEfficiency": {
       "name": "Eficiencia de Rendimiento",
-      "description": "Optimice el uso de recursos y adáptese a demandas cambiantes."
+      "description": "Optimize uso de recursos y adaptación a las demandas cambiantes."
     },
     "costOptimization": {
       "name": "Optimización de Costos",
@@ -221,7 +221,7 @@
     "enterName": "Por favor ingrese un nombre para la evaluación",
     "selectCategory": "Por favor seleccione al menos una categoría para evaluar",
     "assessmentNotFound": "Evaluación no encontrada",
-    "importError": "Error al importar la evaluación. Por favor asegúrese de que el archivo sea un archivo JSON de evaluación válido.",
+    "importError": "Error al importar la evaluación. Asegúrese de que el archivo sea un archivo de evaluación válido JSON.",
     "saveError": "Error al guardar datos. El almacenamiento de su navegador podría estar lleno.",
     "congratulations": "¡Felicitaciones! ¡Ha completado todas las preguntas! Vea sus resultados en la página de Resultados.",
     "unansweredQuestions": "Tiene {count} pregunta(s) sin responder.\n\nPrimera sin responder: {identifier} - {title}\n\nPor favor responda todas las preguntas antes de completar la evaluación.\n\n¿Ir a la primera pregunta sin responder?",

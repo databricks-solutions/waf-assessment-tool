@@ -3054,6 +3054,24 @@ a:focus-visible {
     min-height: auto;
 }
 
+.pillar-card[role="button"] {
+    cursor: pointer;
+}
+
+.pillar-card[role="button"]:focus {
+    outline: 2px solid rgba(255, 54, 33, 0.35);
+    outline-offset: 2px;
+}
+
+.pillar-card[role="button"]:focus:not(:focus-visible) {
+    outline: none;
+}
+
+.pillar-card[role="button"]:focus-visible {
+    outline: 2px solid rgba(255, 54, 33, 0.45);
+    outline-offset: 2px;
+}
+
 .pillar-card-header {
     display: flex;
     align-items: center;
@@ -3400,6 +3418,14 @@ a:focus-visible {
     border-color: var(--color-border);
     box-shadow: var(--shadow-sm);
     transform: translateY(-1px);
+}
+
+.analysis-question-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+    align-items: flex-start;
 }
 
 .item-header {

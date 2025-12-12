@@ -283,7 +283,10 @@ class GlossaryManager:
         """Loads glossary"""
         self.glossary_path = glossary_path
         self.preserve_terms = []
+        self.force_refresh_terms: List[str] = []
         self.replacements = {}
+        self._preserve_patterns: List[re.Pattern] = []
+        self._force_refresh_patterns: List[re.Pattern] = []
         self._load_glossary()
     
     def _load_glossary(self):
@@ -292,11 +295,97 @@ class GlossaryManager:
             with open(self.glossary_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
                 self.preserve_terms = data.get('preserve', [])
+                self.force_refresh_terms = data.get('forceRefresh', [])
                 self.replacements = data.get('replacements', {})
+                self._preserve_patterns = self._build_preserve_patterns(self.preserve_terms)
+                self._force_refresh_patterns = self._build_preserve_patterns(self.force_refresh_terms)
         except FileNotFoundError:
             print(f"⚠️  Glossary not found at {self.glossary_path}")
             self.preserve_terms = []
+            self.force_refresh_terms = []
             self.replacements = {}
+            self._preserve_patterns = []
+            self._force_refresh_patterns = []
+
+    @staticmethod
+    def _build_preserve_patterns(terms: List[str]) -> List[re.Pattern]:
+        """
+        Builds regex patterns for all preserve terms.
+
+        Rules:
+        - Case-insensitive matching.
+        - Prefer whole-token matching to avoid replacing inside other words.
+        - Sort by length (desc) to reduce partial/overlap issues.
+        """
+        cleaned = [t for t in (terms or []) if isinstance(t, str) and t.strip()]
+        cleaned.sort(key=lambda s: len(s), reverse=True)
+
+        patterns: List[re.Pattern] = []
+        for term in cleaned:
+            escaped = re.escape(term)
+
+            # If term starts/ends with a word char, enforce "not inside another word"
+            left = r"(?<!\w)" if re.match(r"\w", term[0]) else ""
+            right = r"(?!\w)" if re.match(r"\w", term[-1]) else ""
+            patterns.append(re.compile(left + escaped + right, re.IGNORECASE))
+
+        return patterns
+
+    def protect(self, text: str) -> Tuple[str, Dict[str, str]]:
+        """
+        Replaces preserve terms with stable placeholder tokens before translation.
+
+        Returns:
+        - protected_text: text with tokens
+        - token_map: token -> original matched substring (preserves original casing/spacing)
+        """
+        if not text or not self._preserve_patterns:
+            return text, {}
+
+        token_map: Dict[str, str] = {}
+        protected = text
+        counter = 0
+
+        for pattern in self._preserve_patterns:
+            def _repl(m: re.Match) -> str:
+                nonlocal counter
+                token = f"__DBX_GLOSSARY_TERM_{counter}__"
+                counter += 1
+                token_map[token] = m.group(0)
+                return token
+
+            protected = pattern.sub(_repl, protected)
+
+        return protected, token_map
+
+    def unprotect(self, text: str, token_map: Dict[str, str]) -> str:
+        """Restores preserve tokens back to their original matched substrings."""
+        if not text or not token_map:
+            return text
+
+        restored = text
+        # Deterministic: longer tokens first (defensive, though tokens shouldn't overlap)
+        for token in sorted(token_map.keys(), key=len, reverse=True):
+            restored = restored.replace(token, token_map[token])
+        return restored
+
+    def should_force_refresh(self, source_text: str) -> bool:
+        """
+        Returns True if this source string should be retranslated even when hashes match.
+
+        Purpose: allow “glossary corrections” (e.g., stop literal translations of specific terms)
+        without forcing a full retranslation of the entire corpus.
+        """
+        if not source_text:
+            return False
+
+        # User intent: retranslate any sentence that contains a term from `preserve`.
+        # We also keep support for the narrower `forceRefresh` list.
+        if self._preserve_patterns and any(p.search(source_text) for p in self._preserve_patterns):
+            return True
+        if self._force_refresh_patterns and any(p.search(source_text) for p in self._force_refresh_patterns):
+            return True
+        return False
     
     def post_process(self, text: str, target_lang: str) -> str:
         """Post-processes translated text by replacing technical terms"""
@@ -859,6 +948,9 @@ class ModuleHandler:
             return text
         
         try:
+            # Protect glossary preserve terms so they are never translated.
+            protected_text, token_map = self.glossary.protect(text)
+
             # Maps language code
             source_code = LANG_CODES.get(source_lang, source_lang)
             target_code = LANG_CODES.get(target_lang, target_lang)
@@ -867,7 +959,10 @@ class ModuleHandler:
                 return text
             
             translator = GoogleTranslator(source=source_code, target=target_code)
-            translated = translator.translate(text)
+            translated = translator.translate(protected_text)
+
+            # Restore preserved terms back to their original form (case/spacing as in source).
+            translated = self.glossary.unprotect(translated, token_map)
             
             # Post-processes with glossary
             translated = self.glossary.post_process(translated, target_lang)
@@ -964,13 +1059,25 @@ class ModuleHandler:
                     stored_hash = hashes_dict.get(current_path)
                     
                     if not full and stored_hash == current_hash and key in target:
-                        # Uses existing translation (hash matches)
-                        preserved_count += 1
-                        preserved_total += 1
+                        # Uses existing translation (hash matches), unless glossary refresh is requested.
+                        if self.glossary.should_force_refresh(value):
+                            translated = self.translate_text(value, target_lang)
+                            target[key] = translated
+                            hashes_dict[current_path] = current_hash
+                            trans_count += 1
+                            translated_total += 1
+                            checkpoint_save()
+                        else:
+                            # Still apply post_process to keep glossary replacements up to date (no network call).
+                            target[key] = self.glossary.post_process(str(target.get(key, "")), target_lang)
+                            preserved_count += 1
+                            preserved_total += 1
                     elif not full and stored_hash is None and key in target:
                         # Preserves existing translation when no hash exists
                         # Generate hash from current source text for future detection
                         hashes_dict[current_path] = current_hash
+                        # Apply post_process to keep replacements consistent
+                        target[key] = self.glossary.post_process(str(target.get(key, "")), target_lang)
                         preserved_count += 1
                         preserved_total += 1
                     else:
@@ -1060,11 +1167,21 @@ class ModuleHandler:
                     stored_hash = hashes_dict.get(field_path)
                     
                     if not full and stored_hash == current_hash:
-                        preserved_count += 1
+                        if self.glossary.should_force_refresh(str(source_value)):
+                            translated = self.translate_text(source_value, target_lang)
+                            target_cat[field] = translated
+                            hashes_dict[field_path] = current_hash
+                            translated_count += 1
+                            checkpoint_save()
+                        else:
+                            # Keep existing, but apply post_process for replacements
+                            target_cat[field] = self.glossary.post_process(str(target_cat.get(field, "")), target_lang)
+                            preserved_count += 1
                         continue
                     elif not full and stored_hash is None and field in target_cat:
                         # Preserve existing translation, generate hash
                         hashes_dict[field_path] = current_hash
+                        target_cat[field] = self.glossary.post_process(str(target_cat.get(field, "")), target_lang)
                         preserved_count += 1
                         continue
                     
@@ -1104,11 +1221,20 @@ class ModuleHandler:
                         stored_hash = hashes_dict.get(field_path)
                         
                         if not full and stored_hash == current_hash:
-                            preserved_count += 1
+                            if self.glossary.should_force_refresh(str(source_value)):
+                                translated = self.translate_text(source_value, target_lang)
+                                target_q[field] = translated
+                                hashes_dict[field_path] = current_hash
+                                translated_count += 1
+                                checkpoint_save()
+                            else:
+                                target_q[field] = self.glossary.post_process(str(target_q.get(field, "")), target_lang)
+                                preserved_count += 1
                             continue
                         elif not full and stored_hash is None and field in target_q:
                             # Preserve existing translation, generate hash
                             hashes_dict[field_path] = current_hash
+                            target_q[field] = self.glossary.post_process(str(target_q.get(field, "")), target_lang)
                             preserved_count += 1
                             continue
                         
@@ -1136,10 +1262,19 @@ class ModuleHandler:
                         stored_hash = hashes_dict.get(field_path)
                         
                         if not full and stored_hash == current_hash:
-                            preserved_count += 1
+                            if self.glossary.should_force_refresh(str(source_context)):
+                                translated = self.translate_text(source_context, target_lang)
+                                target_guidance['context'] = translated
+                                hashes_dict[field_path] = current_hash
+                                translated_count += 1
+                                checkpoint_save()
+                            else:
+                                target_guidance['context'] = self.glossary.post_process(str(target_guidance.get('context', "")), target_lang)
+                                preserved_count += 1
                         elif not full and stored_hash is None and 'context' in target_guidance:
                             # Preserve existing translation, generate hash
                             hashes_dict[field_path] = current_hash
+                            target_guidance['context'] = self.glossary.post_process(str(target_guidance.get('context', "")), target_lang)
                             preserved_count += 1
                         else:
                             translated = self.translate_text(source_context, target_lang)
@@ -1167,10 +1302,19 @@ class ModuleHandler:
                                 stored_hash = hashes_dict.get(field_path)
                                 
                                 if not full and stored_hash == current_hash:
-                                    preserved_count += 1
+                                    if self.glossary.should_force_refresh(str(source_cat_name)):
+                                        translated = self.translate_text(source_cat_name, target_lang)
+                                        target_item['category'] = translated
+                                        hashes_dict[field_path] = current_hash
+                                        translated_count += 1
+                                        checkpoint_save()
+                                    else:
+                                        target_item['category'] = self.glossary.post_process(str(target_item.get('category', "")), target_lang)
+                                        preserved_count += 1
                                 elif not full and stored_hash is None and 'category' in target_item:
                                     # Preserve existing translation, generate hash
                                     hashes_dict[field_path] = current_hash
+                                    target_item['category'] = self.glossary.post_process(str(target_item.get('category', "")), target_lang)
                                     preserved_count += 1
                                 else:
                                     translated = self.translate_text(source_cat_name, target_lang)
@@ -1193,11 +1337,20 @@ class ModuleHandler:
                                     stored_hash = hashes_dict.get(field_path)
                                     
                                     if not full and stored_hash == current_hash:
-                                        preserved_count += 1
+                                        if self.glossary.should_force_refresh(str(source_q_text)):
+                                            translated = self.translate_text(source_q_text, target_lang)
+                                            target_qs[qq_idx] = translated
+                                            hashes_dict[field_path] = current_hash
+                                            translated_count += 1
+                                            checkpoint_save()
+                                        else:
+                                            target_qs[qq_idx] = self.glossary.post_process(str(target_qs[qq_idx]), target_lang)
+                                            preserved_count += 1
                                         continue
                                     elif not full and stored_hash is None and qq_idx < len(target_qs) and target_qs[qq_idx]:
                                         # Preserve existing translation, generate hash
                                         hashes_dict[field_path] = current_hash
+                                        target_qs[qq_idx] = self.glossary.post_process(str(target_qs[qq_idx]), target_lang)
                                         preserved_count += 1
                                         continue
                                     
@@ -1232,10 +1385,19 @@ class ModuleHandler:
                                 stored_hash = hashes_dict.get(field_path)
                                 
                                 if not full and stored_hash == current_hash:
-                                    preserved_count += 1
+                                    if self.glossary.should_force_refresh(str(source_title)):
+                                        translated = self.translate_text(source_title, target_lang)
+                                        target_res['title'] = translated
+                                        hashes_dict[field_path] = current_hash
+                                        translated_count += 1
+                                        checkpoint_save()
+                                    else:
+                                        target_res['title'] = self.glossary.post_process(str(target_res.get('title', "")), target_lang)
+                                        preserved_count += 1
                                 elif not full and stored_hash is None and 'title' in target_res:
                                     # Preserve existing translation, generate hash
                                     hashes_dict[field_path] = current_hash
+                                    target_res['title'] = self.glossary.post_process(str(target_res.get('title', "")), target_lang)
                                     preserved_count += 1
                                 else:
                                     translated = self.translate_text(source_title, target_lang)

@@ -1134,7 +1134,7 @@ class WAFApp {
         let totalScore = 0;
         let maxPossibleScore = 0;
 
-        filteredPillars.forEach(pillar => {
+        filteredPillars.forEach((pillar, pillarIndex) => {
             const pillarData = assessment.data.pillars[pillar.id] || {};
             const pillarStats = {
                 id: pillar.id,
@@ -1152,7 +1152,7 @@ class WAFApp {
                 questions: []
             };
 
-            pillar.questions.forEach(question => {
+            pillar.questions.forEach((question, questionIndex) => {
                 const status = pillarData[question.id] || 'answer-later';
                 const questionScore = this.getStatusScore(status);
 
@@ -1194,7 +1194,8 @@ class WAFApp {
                     principle: question.principle,
                     title: question.title,
                     status: status,
-                    score: questionScore
+                    score: questionScore,
+                    questionIndex: questionIndex
                 });
 
                 totalQuestions++;
@@ -1252,13 +1253,19 @@ class WAFApp {
                         score: 0,
                         maxScore: 0,
                         percentage: 0,
-                        questionCount: 0
+                        questionCount: 0,
+                        questions: []
                     };
                 }
 
                 groupedData[pillar.name][principle].score += question.score;
                 groupedData[pillar.name][principle].maxScore += 3; // Max score per question
                 groupedData[pillar.name][principle].questionCount += 1;
+                groupedData[pillar.name][principle].questions.push({
+                    identifier: question.identifier,
+                    status: question.status,
+                    questionIndex: question.questionIndex
+                });
             });
 
             // Calculate percentages
@@ -1267,6 +1274,10 @@ class WAFApp {
                 data.percentage = data.maxScore > 0 
                     ? Math.round((data.score / data.maxScore) * 100) 
                     : 0;
+                // Keep tag ordering consistent with Assessment (pillar question order)
+                if (Array.isArray(data.questions)) {
+                    data.questions.sort((a, b) => (a.questionIndex ?? 0) - (b.questionIndex ?? 0));
+                }
             });
         });
 
@@ -1390,7 +1401,14 @@ class WAFApp {
                     </div>
                     <div class="dashboard-pillars-grid">
                         ${results.pillars.map((pillar, index) => `
-                            <div class="dashboard-card pillar-card">
+                            <div
+                                class="dashboard-card pillar-card"
+                                role="button"
+                                tabindex="0"
+                                onclick="wafApp.scrollToAndExpandPillarAnalysis(${index})"
+                                onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); wafApp.scrollToAndExpandPillarAnalysis(${index}); }"
+                                aria-label="View details for pillar ${this.escapeHtml(pillar.name)}"
+                            >
                                 <div class="pillar-card-header">
                                     <div class="pillar-number">${index + 1}</div>
                                     <div class="pillar-header-content">
@@ -1538,6 +1556,20 @@ class WAFApp {
                             <span class="item-score">${data.score}/${data.maxScore} ${this.t('results.points')}</span>
                             <span class="item-count">${data.questionCount} ${data.questionCount === 1 ? this.t('results.question') : this.t('results.questions')}</span>
                         </div>
+                        ${Array.isArray(data.questions) && data.questions.length > 0 ? `
+                            <div class="analysis-question-tags" aria-label="Questions">
+                                ${data.questions.map(q => `
+                                    <button
+                                        type="button"
+                                        class="question-tag status-${this.escapeHtml(q.status || 'answer-later')}"
+                                        onclick="event.stopPropagation(); wafApp.navigateToPage('assessment'); wafApp.navigateToQuestion(${pillarIndex}, ${Number.isFinite(q.questionIndex) ? q.questionIndex : 0})"
+                                        aria-label="Go to question ${this.escapeHtml(q.identifier || '')}"
+                                    >
+                                        ${this.escapeHtml(q.identifier || '')}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        ` : ''}
                     </div>
                 `;
             });
@@ -1578,6 +1610,42 @@ class WAFApp {
             itemsContainer.classList.remove('expanded');
             itemsContainer.classList.add('collapsed');
             header.classList.remove('active');
+        }
+    }
+
+    /**
+     * From Results pillar cards: scroll to Analysis by Pillar and expand the selected pillar.
+     * @param {number} pillarIndex - Index of the pillar to expand
+     */
+    scrollToAndExpandPillarAnalysis(pillarIndex) {
+        const targetCard = document.querySelector(`[data-accordion="principle-pillar-${pillarIndex}"]`);
+        const analysisSection = document.querySelector('.analysis-by-pillar-section');
+
+        // Collapse all other pillar analysis cards (single-open behavior)
+        document.querySelectorAll('[data-accordion^="principle-pillar-"]').forEach(card => {
+            if (card === targetCard) return;
+            const itemsContainer = card.querySelector('.pillar-analysis-items');
+            const header = card.querySelector('.pillar-analysis-header');
+            if (!itemsContainer || !header) return;
+            itemsContainer.classList.remove('expanded');
+            itemsContainer.classList.add('collapsed');
+            header.classList.remove('active');
+        });
+
+        if (targetCard) {
+            const itemsContainer = targetCard.querySelector('.pillar-analysis-items');
+            const header = targetCard.querySelector('.pillar-analysis-header');
+            if (itemsContainer && header && itemsContainer.classList.contains('collapsed')) {
+                itemsContainer.classList.remove('collapsed');
+                itemsContainer.classList.add('expanded');
+                header.classList.add('active');
+            }
+            targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+        }
+
+        if (analysisSection) {
+            analysisSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
 
